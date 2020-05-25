@@ -1,9 +1,12 @@
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Diff
 {
-    public class HtmlDiffJsInterop
+    internal class DiffJsInterop
     {
         public static ValueTask<string> Invoke(IJSRuntime jsRuntime, string firstHtml, string secondHtml)
         {
@@ -14,5 +17,6 @@ namespace Diff
                     firstHtml,
                     secondHtml});
         }
+
     }
 }
