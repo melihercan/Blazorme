@@ -22,7 +22,7 @@ namespace Blazorme
 
             return outputFormat switch
             {
-                Diff.EOutputFormat.LineByLine => await jsRuntime.InvokeAsync<string>(
+                Diff.EOutputFormat.TextRow => await jsRuntime.InvokeAsync<string>(
                     "Diff2Html.html",
                     new object[]
                     {
@@ -35,7 +35,7 @@ namespace Blazorme
                         }
                     }),
 
-                Diff.EOutputFormat.SideBySide => await jsRuntime.InvokeAsync<string>(
+                Diff.EOutputFormat.TextColumn => await jsRuntime.InvokeAsync<string>(
                     "Diff2Html.html",
                     new object[]
                     {

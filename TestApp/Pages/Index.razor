@@ -1,58 +1,65 @@
 ﻿@page "/"
 
-<h1>Diff inputs</h1>
-<br />
+    <div class="p-2 border border-secondary rounded">
 
-<h3>Input1</h3>
-<div class="row">
-    <div class="col-6">
-        <div class="bg-info pl-2">type text or markdown...</div>
-        <textarea class="form-control" @bind-value="Body1" @bind-value:event="oninput"></textarea>
+        <h1>Diff inputs</h1>
+        <br />
+
+        <h3>Input1</h3>
+        <div class="row">
+            <div class="col-6">
+                <div class="bg-info pl-2">type text or markdown...</div>
+                <textarea class="form-control" @bind-value="Body1" @bind-value:event="oninput"></textarea>
+            </div>
+            <div class="col-6">
+                <div class="bg-info pl-2">and see it in HTML</div>
+                @((MarkupString) Preview1)
+            </div>
+        </div>
+        <br />
+
+        <h3>Input2</h3>
+        <div class="row">
+            <div class="col-6">
+                <div class="bg-info pl-2">type text or markdown...</div>
+                <textarea class="form-control" @bind-value="Body2" @bind-value:event="oninput"></textarea>
+            </div>
+            <div class="col-6">
+                <div class="bg-info pl-2">and see it in HTML</div>
+                @((MarkupString) Preview2)
+            </div>
+        </div>
+        <br />
     </div>
-    <div class="col-6">
-        <div class="bg-info pl-2">and see it in HTML</div>
-        @((MarkupString) Preview1)
+
+    <br />
+    <br />
+
+    <div class="p-2 border border-secondary rounded">
+        <h1>Diff outputs</h1>
+        <br />
+
+        <h3>HTML inline</h3>
+        <div class="bg-light">
+            <Diff FirstString=@Preview1
+                  SecondString=@Preview2
+                  OutputFormat="Blazorme.Diff.EOutputFormat.HtmlInline" />
+        </div>
+        <br />
+
+        <h3>Text row</h3>
+        <Diff FirstString=@Body1
+              SecondString=@Body2
+              OutputFormat="Blazorme.Diff.EOutputFormat.TextRow"
+              OutputTitle="Input1 vs Input2" />
+        <br />
+
+        <h3>Text column</h3>
+        <Diff FirstString=@Body1
+              SecondString=@Body2
+              OutputFormat="Blazorme.Diff.EOutputFormat.TextColumn"
+              OutputTitle="Input1 vs Input2" />
+        <br />
     </div>
-</div>
-<br />
-
-<h3>Input2</h3>
-<div class="row">
-    <div class="col-6">
-        <div class="bg-info pl-2">type text or markdown...</div>
-        <textarea class="form-control" @bind-value="Body2" @bind-value:event="oninput"></textarea>
-    </div>
-    <div class="col-6">
-        <div class="bg-info pl-2">and see it in HTML</div>
-        @((MarkupString) Preview2)
-    </div>
-</div>
-<br />
-
-<br />
-<br />
-
-<h1>Diff outputs</h1>
-<br />
-
-<h3>Inline</h3>
-<Diff FirstString=@Preview1
-      SecondString=@Preview2
-      OutputFormat="Blazorme.Diff.EOutputFormat.Inline" />
-<br />
-
-<h3>Line by line</h3>
-<Diff FirstString=@Body1
-      SecondString=@Body2
-      OutputFormat="Blazorme.Diff.EOutputFormat.LineByLine"
-      OutputTitle="Input1 vs Input2" />
-<br />
-
-<h3>Side by side</h3>
-<Diff FirstString=@Body1
-      SecondString=@Body2
-      OutputFormat="Blazorme.Diff.EOutputFormat.SideBySide"
-      OutputTitle="Input1 vs Input2" />
-<br />
 
 

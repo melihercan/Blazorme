@@ -24,13 +24,13 @@ namespace Blazorme
 
         public enum EOutputFormat
         {
-            Inline,
-            LineByLine,
-            SideBySide,
+            HtmlInline,
+            TextRow,
+            TextColumn,
         }
 
         [Parameter]
-        public EOutputFormat OutputFormat { get; set; } = EOutputFormat.Inline;
+        public EOutputFormat OutputFormat { get; set; } = EOutputFormat.HtmlInline;
 
         [Parameter]
         public string OutputTitle { get; set; } = string.Empty;
@@ -50,9 +50,9 @@ namespace Blazorme
         }
 
         private async Task<string> DoDiffAsync(string first, string second, 
-            Diff.EOutputFormat outputformat = Diff.EOutputFormat.Inline, string outputTitle = "")
+            Diff.EOutputFormat outputformat = Diff.EOutputFormat.HtmlInline, string outputTitle = "")
         {
-            if(outputformat == EOutputFormat.Inline)
+            if(outputformat == EOutputFormat.HtmlInline)
             {
                 return new HtmlDiff.HtmlDiff(first, second).Build();
             }
