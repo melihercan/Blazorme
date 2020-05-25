@@ -1,6 +1,33 @@
 ﻿@page "/index"
 
-<h1>Hello, world!</h1>
+<h1>Diff outputs</h1>
 
-<Diff FirstString="<p>Hello World!<p>" SecondString="<p>Hell World<p>" OutputFormat="Diff.EOutputFormat.Inline"/>
+<div class="my-5" />
 
+<h3>Inline</h3>
+<Diff FirstString=@first
+      SecondString=@second
+      OutputFormat="Diff.EOutputFormat.Inline" />
+<br />
+
+<h3>Line by line</h3>
+<Diff FirstString=@first
+      SecondString=@second
+      OutputFormat="Diff.EOutputFormat.LineByLine"
+      Title="Line by line" />
+<br />
+
+<h3>Side by side</h3>
+<Diff FirstString=@first
+      SecondString=@second
+      OutputFormat="Diff.EOutputFormat.SideBySide"
+      Title="Side by side" />
+<br />
+
+
+@code{
+    string first = "<p>Hello World!</p>";
+
+    string second = "<p>Hell World</p>";
+
+}

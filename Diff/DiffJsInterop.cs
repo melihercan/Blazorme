@@ -1,54 +1,65 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazorme;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Diff;
 
-namespace Diff
+namespace Blazorme
 {
     internal class DiffJsInterop
     {
-        internal static async ValueTask<string> Invoke(IJSRuntime jsRuntime, string firstHtml, string secondHtml)
+        internal static async ValueTask<string> Invoke(IJSRuntime jsRuntime, string first, string second, 
+            Diff.EOutputFormat outputFormat = Diff.EOutputFormat.Inline, string title = "")
         {
-            var stringOne = firstHtml; // "string 1 here";
-            var stringTwo = secondHtml; // "string 2 here";
-
-            string diffString = string.Empty;
-            diffString = await jsRuntime.InvokeAsync<string>(
+            var diffString = string.Empty;
+            if (outputFormat != Diff.EOutputFormat.Inline)
+            {
+                diffString = await jsRuntime.InvokeAsync<string>(
                 "Diff.createTwoFilesPatch",
                 new object[]
                 {
-                    "thisWillBeShownAsFileName", "thisWillBeShownAsFileName", stringOne, stringTwo
+                    title, title, first, second
                 });
+            }
 
-            Console.WriteLine($" DIFF: {diffString}");
-
-            var diffHtml = await jsRuntime.InvokeAsync<string>(
-                "Diff2Html.html",
-                new object[]
-                {
-                    diffString,
-                    new Diff2HtmlConfiguration
+            return outputFormat switch
+            {
+                Diff.EOutputFormat.Inline => await jsRuntime.InvokeAsync<string>(
+                    "htmldiff",
+                    new object[]
                     {
-                        drawFileList = false,
-                        matching = Diff2HtmlConfiguration.Words,
-                        outputFormat = Diff2HtmlConfiguration.SideBySide
-                    }
-                });
-            Console.WriteLine($" DIFF: {diffHtml}");
-            return diffHtml;
+                        first,
+                        second
+                    }),
 
-            // Implemented in htmldiff.js
-            //return await jsRuntime.InvokeAsync<string>(
-            //    "htmldiff",
-            //    new object[] 
-            //    {
-            //        firstHtml,
-            //        secondHtml
-            //    });
+                Diff.EOutputFormat.LineByLine => await jsRuntime.InvokeAsync<string>(
+                    "Diff2Html.html",
+                    new object[]
+                    {
+                        diffString,
+                        new Diff2HtmlConfiguration
+                        {
+                            drawFileList = false,
+                            matching = Diff2HtmlConfiguration.Words,
+                            outputFormat = Diff2HtmlConfiguration.LineByLine
+                        }
+                    }),
 
-
-
+                Diff.EOutputFormat.SideBySide => await jsRuntime.InvokeAsync<string>(
+                    "Diff2Html.html",
+                    new object[]
+                    {
+                        diffString,
+                        new Diff2HtmlConfiguration
+                        {
+                            drawFileList = false,
+                            matching = Diff2HtmlConfiguration.Words,
+                            outputFormat = Diff2HtmlConfiguration.SideBySide
+                        }
+                    }),
+            };
         }
 
         internal static async ValueTask<string> Get(IJSRuntime jsRuntime, string first, string second)
@@ -61,7 +72,5 @@ namespace Diff
                 });
 
         }
-
-
     }
 }
