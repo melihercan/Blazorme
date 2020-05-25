@@ -59,6 +59,8 @@ namespace Blazorme
                             outputFormat = Diff2HtmlConfiguration.SideBySide
                         }
                     }),
+
+                _ => string.Empty,
             };
         }
 

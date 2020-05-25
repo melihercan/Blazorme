@@ -1,28 +1,74 @@
 ﻿@page "/index"
 
 <h1>Diff outputs</h1>
-
-<div class="my-5" />
+<br />
 
 <h3>Inline</h3>
-<Diff FirstString=@first
-      SecondString=@second
+<Diff FirstString=@Preview1
+      SecondString=@Preview2
       OutputFormat="Diff.EOutputFormat.Inline" />
 <br />
 
 <h3>Line by line</h3>
-<Diff FirstString=@first
-      SecondString=@second
+<Diff FirstString=@Body1
+      SecondString=@Body2
       OutputFormat="Diff.EOutputFormat.LineByLine"
-      Title="Line by line" />
+      Title="Input1 vs Input2" />
 <br />
 
 <h3>Side by side</h3>
-<Diff FirstString=@first
-      SecondString=@second
+<Diff FirstString=@Body1
+      SecondString=@Body2
       OutputFormat="Diff.EOutputFormat.SideBySide"
-      Title="Side by side" />
+      Title="Input1 vs Input2" />
 <br />
+
+
+<br />
+<br />
+<br />
+
+<div class="text-center">
+    <button type="button" class="btn btn-primary"
+            data-toggle="tooltip" title="refresh"
+            @onclick="@RefreshSelected">
+        Refresh
+        <span class="oi oi-reload" />
+    </button>
+</div>
+<br />
+
+
+
+<h1>Diff inputs</h1>
+<br />
+
+<h3>Input1</h3>
+<div class="row">
+    <div class="col-6">
+        <div class="bg-info pl-2">type text or markdown...</div>
+        <textarea class="form-control" @bind-value="Body1" @bind-value:event="oninput"></textarea>
+    </div>
+    <div class="col-6">
+        <div class="bg-info pl-2">and see it in HTML</div>
+        @((MarkupString) Preview1)
+    </div>
+</div>
+
+<br />
+
+
+<h3>Input2</h3>
+<div class="row">
+    <div class="col-6">
+        <div class="bg-info pl-2">type text or markdown...</div>
+        <textarea class="form-control" @bind-value="Body2" @bind-value:event="oninput"></textarea>
+    </div>
+    <div class="col-6">
+        <div class="bg-info pl-2">and see it in HTML</div>
+        @((MarkupString) Preview2)
+    </div>
+</div>
 
 
 @code{
