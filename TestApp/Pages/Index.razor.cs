@@ -25,11 +25,5 @@ namespace TestApp.Pages
 
             await base.OnInitializedAsync();
         }
-
-
-        private void RefreshSelected(MouseEventArgs e)
-        {
-
-        }
     }
 }

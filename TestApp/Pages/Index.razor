@@ -1,4 +1,4 @@
-﻿@page "/index"
+﻿@page "/"
 
 <h1>Diff inputs</h1>
 <br />
@@ -38,20 +38,20 @@
 <h3>Inline</h3>
 <Diff FirstString=@Preview1
       SecondString=@Preview2
-      OutputFormat="Diff.EOutputFormat.Inline" />
+      OutputFormat="Blazorme.Diff.EOutputFormat.Inline" />
 <br />
 
 <h3>Line by line</h3>
 <Diff FirstString=@Body1
       SecondString=@Body2
-      OutputFormat="Diff.EOutputFormat.LineByLine"
+      OutputFormat="Blazorme.Diff.EOutputFormat.LineByLine"
       OutputTitle="Input1 vs Input2" />
 <br />
 
 <h3>Side by side</h3>
 <Diff FirstString=@Body1
       SecondString=@Body2
-      OutputFormat="Diff.EOutputFormat.SideBySide"
+      OutputFormat="Blazorme.Diff.EOutputFormat.SideBySide"
       OutputTitle="Input1 vs Input2" />
 <br />
 
