@@ -11,29 +11,17 @@ namespace Blazorme
     internal class DiffJsInterop
     {
         internal static async ValueTask<string> Invoke(IJSRuntime jsRuntime, string first, string second, 
-            Diff.EOutputFormat outputFormat = Diff.EOutputFormat.Inline, string title = "")
+            Diff.EOutputFormat outputFormat, string outputTitle)
         {
-            var diffString = string.Empty;
-            if (outputFormat != Diff.EOutputFormat.Inline)
-            {
-                diffString = await jsRuntime.InvokeAsync<string>(
+            var diffString = await jsRuntime.InvokeAsync<string>(
                 "Diff.createTwoFilesPatch",
                 new object[]
                 {
-                    title, title, first, second
+                    outputTitle, outputTitle, first, second
                 });
-            }
 
             return outputFormat switch
             {
-                Diff.EOutputFormat.Inline => await jsRuntime.InvokeAsync<string>(
-                    "htmldiff",
-                    new object[]
-                    {
-                        first,
-                        second
-                    }),
-
                 Diff.EOutputFormat.LineByLine => await jsRuntime.InvokeAsync<string>(
                     "Diff2Html.html",
                     new object[]

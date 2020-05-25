@@ -37,18 +37,30 @@ namespace Blazorme
 
         protected override async Task OnInitializedAsync()
         {
-            _diff = await DiffJsInterop.Invoke(_jsRuntime, FirstString, SecondString, OutputFormat, OutputTitle );
+            _diff = await DoDiffAsync(FirstString, SecondString, OutputFormat, OutputTitle);
 
             await base.OnInitializedAsync();
         }
 
         protected override async Task OnParametersSetAsync()
         {
-            _diff = await DiffJsInterop.Invoke(_jsRuntime, FirstString, SecondString, OutputFormat, OutputTitle);
+            _diff = await DoDiffAsync(FirstString, SecondString, OutputFormat, OutputTitle);
 
             await base.OnParametersSetAsync();
         }
 
+        private async Task<string> DoDiffAsync(string first, string second, 
+            Diff.EOutputFormat outputformat = Diff.EOutputFormat.Inline, string outputTitle = "")
+        {
+            if(outputformat == EOutputFormat.Inline)
+            {
+                return new HtmlDiff.HtmlDiff(first, second).Build();
+            }
+            else
+            {
+                return await DiffJsInterop.Invoke(_jsRuntime, first, second, outputformat, outputTitle);
+            }
+        }
     }
 }
 
