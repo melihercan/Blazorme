@@ -17,10 +17,7 @@ namespace TestApp.Pages
         public string Body1 { get; set; } = string.Empty;
         public string Preview1 => Markdown.ToHtml(Body1);
         public string Body2 { get; set; } = string.Empty;
-        public string Preview2 => Markdown.ToHtml(Body1);
-
-
-
+        public string Preview2 => Markdown.ToHtml(Body2);
 
         protected override async Task OnInitializedAsync()
         {

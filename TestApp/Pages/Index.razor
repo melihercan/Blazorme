@@ -1,45 +1,5 @@
 ﻿@page "/index"
 
-<h1>Diff outputs</h1>
-<br />
-
-<h3>Inline</h3>
-<Diff FirstString=@Preview1
-      SecondString=@Preview2
-      OutputFormat="Diff.EOutputFormat.Inline" />
-<br />
-
-<h3>Line by line</h3>
-<Diff FirstString=@Body1
-      SecondString=@Body2
-      OutputFormat="Diff.EOutputFormat.LineByLine"
-      Title="Input1 vs Input2" />
-<br />
-
-<h3>Side by side</h3>
-<Diff FirstString=@Body1
-      SecondString=@Body2
-      OutputFormat="Diff.EOutputFormat.SideBySide"
-      Title="Input1 vs Input2" />
-<br />
-
-
-<br />
-<br />
-<br />
-
-<div class="text-center">
-    <button type="button" class="btn btn-primary"
-            data-toggle="tooltip" title="refresh"
-            @onclick="@RefreshSelected">
-        Refresh
-        <span class="oi oi-reload" />
-    </button>
-</div>
-<br />
-
-
-
 <h1>Diff inputs</h1>
 <br />
 
@@ -54,9 +14,7 @@
         @((MarkupString) Preview1)
     </div>
 </div>
-
 <br />
-
 
 <h3>Input2</h3>
 <div class="row">
@@ -69,11 +27,32 @@
         @((MarkupString) Preview2)
     </div>
 </div>
+<br />
+
+<br />
+<br />
+
+<h1>Diff outputs</h1>
+<br />
+
+<h3>Inline</h3>
+<Diff FirstString=@Preview1
+      SecondString=@Preview2
+      OutputFormat="Diff.EOutputFormat.Inline" />
+<br />
+
+<h3>Line by line</h3>
+<Diff FirstString=@Body1
+      SecondString=@Body2
+      OutputFormat="Diff.EOutputFormat.LineByLine"
+      OutputTitle="Input1 vs Input2" />
+<br />
+
+<h3>Side by side</h3>
+<Diff FirstString=@Body1
+      SecondString=@Body2
+      OutputFormat="Diff.EOutputFormat.SideBySide"
+      OutputTitle="Input1 vs Input2" />
+<br />
 
 
-@code{
-    string first = "<p>Hello World!</p>";
-
-    string second = "<p>Hell World</p>";
-
-}

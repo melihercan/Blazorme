@@ -33,13 +33,20 @@ namespace Blazorme
         public EOutputFormat OutputFormat { get; set; } = EOutputFormat.Inline;
 
         [Parameter]
-        public string Title { get; set; } = string.Empty;
+        public string OutputTitle { get; set; } = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
-            _diff = await DiffJsInterop.Invoke(_jsRuntime, FirstString, SecondString, OutputFormat, Title );
+            _diff = await DiffJsInterop.Invoke(_jsRuntime, FirstString, SecondString, OutputFormat, OutputTitle );
 
             await base.OnInitializedAsync();
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            _diff = await DiffJsInterop.Invoke(_jsRuntime, FirstString, SecondString, OutputFormat, OutputTitle);
+
+            await base.OnParametersSetAsync();
         }
 
     }
