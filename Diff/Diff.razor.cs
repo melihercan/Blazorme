@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace Blazorme
 {
-    public partial class Diff : ComponentBase
+
+    public partial class Diff : ComponentBase//, IDiff
     {
+        private string _diff { get; set; } = string.Empty;
+
         [Inject]
         private IJSRuntime _jsRuntime { get; set; }
 
@@ -19,16 +22,15 @@ namespace Blazorme
         [Parameter]
         public string SecondString { get; set; }
 
-        public enum EDiffType
+        public enum EOutputFormat
         {
-            Html,
+            Inline,
+            LineByLine,
             SideBySide,
-            LineByLine
         }
-        [Parameter]
-        public EDiffType DiffType { get; set; }
 
-        private string _diff { get; set; } = string.Empty;
+        [Parameter]
+        public EOutputFormat OutputFormat { get; set; }
 
 
         protected override async Task OnInitializedAsync()
