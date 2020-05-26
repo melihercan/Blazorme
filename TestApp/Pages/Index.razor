@@ -2,10 +2,10 @@
 
     <div class="p-2 border border-secondary rounded">
 
-        <h1>Diff inputs</h1>
+        <h2>Diff inputs</h2>
         <br />
 
-        <h3>@DiffInputTitle.First</h3>
+        <h4>@DiffInputTitle.First</h4>
         <div class="row">
             <div class="col-6">
                 <div class="bg-info text-white pl-2">type text or markdown...</div>
@@ -18,7 +18,7 @@
         </div>
         <br />
 
-        <h3>@DiffInputTitle.Second</h3>
+        <h4>@DiffInputTitle.Second</h4>
         <div class="row">
             <div class="col-6">
                 <div class="bg-info text-white pl-2">type text or markdown...</div>
@@ -33,10 +33,9 @@
     </div>
     <br />
 
-    <br />
 
     <div class="p-2 border border-secondary rounded">
-        <h1>Diff outputs</h1>
+        <h2>Diff outputs</h2>
         <br />
 
         <h3>Inline</h3>
@@ -46,7 +45,7 @@
         </div>
         <br />
 
-        <h3>Row</h3>
+        <h4>Row</h4>
         <Diff FirstInput=@Body1
               SecondInput=@Body2
               FirstTitle=@DiffInputTitle.First
@@ -54,7 +53,7 @@
               OutputFormat=@DiffOutputFormat.Row />
         <br />
 
-        <h3>Column</h3>
+        <h4>Column</h4>
         <Diff FirstInput=@Body1
               SecondInput=@Body2
               FirstTitle=@DiffInputTitle.First
