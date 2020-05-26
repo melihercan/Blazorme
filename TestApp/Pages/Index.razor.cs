@@ -12,7 +12,7 @@ namespace TestApp.Pages
     public partial class Index : ComponentBase
     {
         [Inject]
-        private IDiff Diff { get; set; }
+        private IDiff DiffApi { get; set; }
 
         public string Body1 { get; set; } = string.Empty;
         public string Preview1 => Markdown.ToHtml(Body1);
@@ -23,8 +23,8 @@ namespace TestApp.Pages
         {
             var first = "Hello World";
             var second = "Hell World!";
-            var diff = Diff.GetAsync(first, second);
-            var diffHtml = Diff.GetHtmlAsync(first, second, DiffOutputFormat.Row);
+            var diff = DiffApi.GetAsync(first, second);
+            var diffHtml = DiffApi.GetHtmlAsync(first, second, DiffOutputFormat.Row);
 
 
             await base.OnInitializedAsync();
