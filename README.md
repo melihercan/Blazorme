@@ -26,6 +26,13 @@ For API calls from code behine add:
 ```
   using Blazorme;
 ```
+* Inject
+
+If you like to use API from code behind, inject `IDiff`:
+```cs
+  [Inject]
+  private IDiff DiffApi { get; set; }
+```
 * JS and CSS references:
 
 Add the following lines to your `index.html` (WebAsembly) or `_Host.cshtml` (Server) files:
@@ -45,10 +52,29 @@ Add the following lines to your `index.html` (WebAsembly) or `_Host.cshtml` (Ser
             integrity="sha256-jaOrunaAmlbF5x0BUXSJbKimY9Urt8yORnOg3A9BDfM=" 
             crossorigin="anonymous">
     </script>
-
 ```
+* Service addition:
 
+Add the following entires to `Program.cs` in `Main` (WebAssembly) or `Startup.cs` in `Configure` (Server) function. 
+```cs
+  using Blazorme;
+  
+  ...
+  
+  Main
+  {
+      ...
+      builder.Services.AddDiff();
+      ...
+  }
 
+  Configure
+  {
+      ...
+      services.AddDiff();
+      ...
+  }
+```
 ## Component Usage
 In your Blazor page add the Diff entry for the desired output format as shown below:
 ### For Inline format
