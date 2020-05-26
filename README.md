@@ -10,7 +10,10 @@ Please use `TestApp` as a reference for your implementation.
 
 ![alt text](https://github.com/melihercan/gifs/blob/master/Diff.gif)
 ## Third Party Packages
-
+The following packages have been used:
+* htmldiff.net: [GitHub](https://github.com/Rohland/htmldiff.net), [NuGet](https://www.nuget.org/packages/htmldiff.net/) 
+* diff: [GitHub](https://github.com/kpdecker/jsdiff), [jsdelivr](https://www.jsdelivr.com/package/npm/diff) 
+* diff2html: [GitHub](https://github.com/rtfpessoa/diff2html), [jsdelivr](https://www.jsdelivr.com/package/npm/diff2html)  
 ## Installation
 * Install NuGet package:
 ```
