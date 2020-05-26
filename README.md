@@ -6,8 +6,48 @@ The idea is to render diff of the two input strings in different output display 
 * Row: Line by line format for text inputs.
 * Column: Side by side format for text inputs.
 
+Please use `TestApp` as a reference for your implementation. 
+
 ![alt text](https://github.com/melihercan/gifs/blob/master/Diff.gif)
+## Third Party Packages
+
 ## Installation
+* Install NuGet package:
+```
+  Install-Package Blazorme.Diff
+```
+* Using:
+
+In `_Imports.razor` add:
+```
+  @using Blazorme
+```
+For API calls from code behine add:
+```
+  using Blazorme;
+```
+* JS and CSS references:
+
+Add the following lines to your `index.html` (WebAsembly) or `_Host.cshtml` (Server) files:
+```html
+    <!-- inside head section -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/diff2html@3.1.7/bundles/css/diff2html.min.css"
+          integrity="sha256-JDuTv80/2mUu1FBkviyttybv8oWSYmqVttPo7VlCXfE="
+          crossorigin="anonymous">
+
+    <!-- inside body section -->
+    <script src="https://cdn.jsdelivr.net/npm/diff@4.0.2/dist/diff.min.js" 
+            integrity="sha256-xofEpXTFTnsOK+GIsjgJc1ZN0kSE3KsTtZJ2GQaWs3I=" 
+            crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/diff2html@3.1.7/bundles/js/diff2html.min.js" 
+            integrity="sha256-jaOrunaAmlbF5x0BUXSJbKimY9Urt8yORnOg3A9BDfM=" 
+            crossorigin="anonymous">
+    </script>
+
+```
+
 
 ## Component Usage
 In your Blazor page add the Diff entry for the desired output format as shown below:
