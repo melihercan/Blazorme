@@ -21,7 +21,11 @@ namespace TestApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var x = Diff.GetAsync("Hello World", "Hell World!");
+            var first = "Hello World";
+            var second = "Hell World!";
+            var diff = Diff.GetAsync(first, second);
+            var diffHtml = Diff.GetHtmlAsync(first, second, DiffOutputFormat.Row);
+
 
             await base.OnInitializedAsync();
         }
