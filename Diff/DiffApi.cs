@@ -4,26 +4,36 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
+using Nito.AsyncEx.Synchronous;
 
 namespace Blazorme
 {
-    public class DiffApi : IDiffApi
+    public class DiffApi : IDiff
     {
         private readonly IJSRuntime _jsRuntime;
 
-        public DiffApi(IJSRuntime jSRuntime)
+        public DiffApi(IJSRuntime jsRuntime)
         {
-            _jsRuntime = jSRuntime;
+            _jsRuntime = jsRuntime;
         }
 
-        public async ValueTask<string> Get(string first, string second)
+        public async Task<string> GetAsync(string first, string second)
         {
-            return await DiffJsInterop.Get(_jsRuntime, first, second);
+            return await DiffJsInterop.GetAsync(_jsRuntime, first, second);
         }
 
-        public string GetHtml(string first, string second)
+        public async Task<string> GetHtmlAsync(string first, string second, 
+            DiffOutputFormat outputFormat = DiffOutputFormat.Inline)
         {
-            return null;
+            if (outputFormat == DiffOutputFormat.Inline)
+            {
+                return new HtmlDiff.HtmlDiff(first, second).Build();
+            }
+            else
+            {
+                return await DiffJsInterop.GetHtmlAsync(_jsRuntime, first, second, outputFormat);
+            }
         }
 
     }

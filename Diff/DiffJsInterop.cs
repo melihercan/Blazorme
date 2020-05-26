@@ -10,23 +10,30 @@ namespace Blazorme
 {
     internal class DiffJsInterop
     {
-        internal static async ValueTask<string> Invoke(IJSRuntime jsRuntime, string first, string second, 
-            Diff.EOutputFormat outputFormat, string outputTitle)
+
+        internal static async ValueTask<string> GetAsync(IJSRuntime jsRuntime, string first, string second)
         {
-            var diffString = await jsRuntime.InvokeAsync<string>(
+            return await jsRuntime.InvokeAsync<string>(
                 "Diff.createTwoFilesPatch",
                 new object[]
                 {
-                    outputTitle, outputTitle, first, second
+                    "diff", "diff", first, second
                 });
+
+        }
+
+        internal static async ValueTask<string> GetHtmlAsync(IJSRuntime jsRuntime, string first, string second,
+            DiffOutputFormat outputFormat)
+        {
+            var diff = await GetAsync(jsRuntime, first, second);
 
             return outputFormat switch
             {
-                Diff.EOutputFormat.TextRow => await jsRuntime.InvokeAsync<string>(
+                DiffOutputFormat.Row => await jsRuntime.InvokeAsync<string>(
                     "Diff2Html.html",
                     new object[]
                     {
-                        diffString,
+                        diff,
                         new Diff2HtmlConfiguration
                         {
                             drawFileList = false,
@@ -35,11 +42,11 @@ namespace Blazorme
                         }
                     }),
 
-                Diff.EOutputFormat.TextColumn => await jsRuntime.InvokeAsync<string>(
+                DiffOutputFormat.Column => await jsRuntime.InvokeAsync<string>(
                     "Diff2Html.html",
                     new object[]
                     {
-                        diffString,
+                        diff,
                         new Diff2HtmlConfiguration
                         {
                             drawFileList = false,
@@ -52,15 +59,5 @@ namespace Blazorme
             };
         }
 
-        internal static async ValueTask<string> Get(IJSRuntime jsRuntime, string first, string second)
-        {
-            return await jsRuntime.InvokeAsync<string>(
-                "Diff.createTwoFilesPatch",
-                new object[]
-                {
-                    "", "", first, second
-                });
-
-        }
     }
 }

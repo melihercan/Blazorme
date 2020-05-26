@@ -12,7 +12,7 @@ namespace TestApp.Pages
     public partial class Index : ComponentBase
     {
         [Inject]
-        private IDiffApi _diff { get; set; }
+        private IDiff Diff { get; set; }
 
         public string Body1 { get; set; } = string.Empty;
         public string Preview1 => Markdown.ToHtml(Body1);
@@ -21,7 +21,7 @@ namespace TestApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var x = await _diff.Get("Hello World", "Hell World!");
+            var x = Diff.GetAsync("Hello World", "Hell World!");
 
             await base.OnInitializedAsync();
         }

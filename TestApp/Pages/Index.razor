@@ -31,35 +31,34 @@
         </div>
         <br />
     </div>
-
     <br />
+
     <br />
 
     <div class="p-2 border border-secondary rounded">
         <h1>Diff outputs</h1>
         <br />
 
-        <h3>HTML inline</h3>
+        <h3>Inline</h3>
         <div class="bg-light">
             <Diff FirstString=@Preview1
                   SecondString=@Preview2
-                  OutputFormat="Blazorme.Diff.EOutputFormat.HtmlInline" />
+                  OutputFormat="DiffOutputFormat.Inline"/>
         </div>
         <br />
 
-        <h3>Text row</h3>
+        <h3>Row</h3>
         <Diff FirstString=@Body1
               SecondString=@Body2
-              OutputFormat="Blazorme.Diff.EOutputFormat.TextRow"
-              OutputTitle="Input1 vs Input2" />
+              OutputFormat="DiffOutputFormat.Row"/>
         <br />
 
-        <h3>Text column</h3>
+        <h3>Column</h3>
         <Diff FirstString=@Body1
               SecondString=@Body2
-              OutputFormat="Blazorme.Diff.EOutputFormat.TextColumn"
-              OutputTitle="Input1 vs Input2" />
+              OutputFormat="DiffOutputFormat.Column"/>
         <br />
     </div>
+    <br/>
 
 

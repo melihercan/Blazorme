@@ -10,7 +10,7 @@ namespace Blazorme
     {
         public static IServiceCollection AddDiffService(this IServiceCollection services)
         {
-            return services.AddScoped<IDiffApi, DiffApi>();
+            return services.AddScoped<IDiff, DiffApi>();
         }
 
     }
