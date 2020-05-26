@@ -21,10 +21,12 @@ namespace TestApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var first = "Hello World";
-            var second = "Hell World!";
-            var diff = DiffApi.GetAsync(first, second);
-            var diffHtml = DiffApi.GetHtmlAsync(first, second, DiffOutputFormat.Row);
+            var firstInput = "Hello World";
+            var secondInput = "Hell World!";
+            var diff = DiffApi.GetAsync(firstInput, secondInput);
+            var diffHtml = DiffApi.GetHtmlAsync(firstInput, secondInput, 
+                DiffInputTitle.First, DiffInputTitle.Second, 
+                DiffOutputFormat.Row);
 
 
             await base.OnInitializedAsync();

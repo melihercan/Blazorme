@@ -18,23 +18,25 @@ namespace Blazorme
             _jsRuntime = jsRuntime;
         }
 
-        public async Task<string> GetAsync(string first, string second)
+        public async Task<string> GetAsync(string firstInput, string secondInput, 
+            string firstTitle = DiffInputTitle.First, string secondTitle = DiffInputTitle.Second)
         {
-            return await DiffJsInterop.GetAsync(_jsRuntime, first, second);
+            return await DiffJsInterop.GetAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle);
         }
-
-        public async Task<string> GetHtmlAsync(string first, string second, 
+             
+        public async Task<string> GetHtmlAsync(string firstInput, string secondInput,
+            string firstTitle = DiffInputTitle.First, string secondTitle = DiffInputTitle.Second,
             DiffOutputFormat outputFormat = DiffOutputFormat.Inline)
         {
             if (outputFormat == DiffOutputFormat.Inline)
             {
-                return new HtmlDiff.HtmlDiff(first, second).Build();
+                return new HtmlDiff.HtmlDiff(firstInput, secondInput).Build();
             }
             else
             {
-                return await DiffJsInterop.GetHtmlAsync(_jsRuntime, first, second, outputFormat);
+                return await DiffJsInterop.GetHtmlAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle, 
+                    outputFormat);
             }
         }
-
     }
 }

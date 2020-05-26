@@ -5,7 +5,7 @@
         <h1>Diff inputs</h1>
         <br />
 
-        <h3>Input1</h3>
+        <h3>First</h3>
         <div class="row">
             <div class="col-6">
                 <div class="bg-info text-white pl-2">type text or markdown...</div>
@@ -18,7 +18,7 @@
         </div>
         <br />
 
-        <h3>Input2</h3>
+        <h3>Second</h3>
         <div class="row">
             <div class="col-6">
                 <div class="bg-info text-white pl-2">type text or markdown...</div>
@@ -41,22 +41,25 @@
 
         <h3>Inline</h3>
         <div class="bg-light">
-            <Diff FirstString=@Preview1
-                  SecondString=@Preview2
-                  OutputFormat="DiffOutputFormat.Inline"/>
+            <Diff FirstInput=@Preview1
+                  SecondInput=@Preview2 />
         </div>
         <br />
 
         <h3>Row</h3>
-        <Diff FirstString=@Body1
-              SecondString=@Body2
-              OutputFormat="DiffOutputFormat.Row"/>
+        <Diff FirstInput=@Body1
+              SecondInput=@Body2
+              FirstTitle=@DiffInputTitle.First
+              SecondTitle=@DiffInputTitle.Second
+              OutputFormat=@DiffOutputFormat.Row />
         <br />
 
         <h3>Column</h3>
-        <Diff FirstString=@Body1
-              SecondString=@Body2
-              OutputFormat="DiffOutputFormat.Column"/>
+        <Diff FirstInput=@Body1
+              SecondInput=@Body2
+              FirstTitle=@DiffInputTitle.First
+              SecondTitle=@DiffInputTitle.Second
+              OutputFormat=@DiffOutputFormat.Column />
         <br />
     </div>
     <br/>
