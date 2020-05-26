@@ -8,7 +8,7 @@ namespace Blazorme
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddDiffService(this IServiceCollection services)
+        public static IServiceCollection AddDiff(this IServiceCollection services)
         {
             return services.AddScoped<IDiff, DiffApi>();
         }

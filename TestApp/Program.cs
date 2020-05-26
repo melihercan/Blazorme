@@ -23,7 +23,7 @@ namespace TestApp
                 BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) 
             });
 
-            builder.Services.AddDiffService();
+            builder.Services.AddDiff();
 
             await builder.Build().RunAsync();
         }
