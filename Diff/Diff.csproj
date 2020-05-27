@@ -5,10 +5,26 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Blazorme.Diff</PackageId>
-    <Authors>Melih Ercan</Authors>
+    <Authors>melihercan</Authors>
     <Company>melihercan</Company>
     <Product>Blazorme.Diff</Product>
+    <Description>Diff component library for Blazor apps.
+It will render diff of the two input strings in different output display formats.
+It can also be used as a library to get diff or html diff output strings from code behind.</Description>
+    <Copyright>melihercan 2020</Copyright>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
+    <PackageReleaseNotes>First version.</PackageReleaseNotes>
+    <PackageTags>blazor diff components</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="LICENSE" />
+    <None Remove="LICENSE" />
+  </ItemGroup>
 
 
   <ItemGroup>
