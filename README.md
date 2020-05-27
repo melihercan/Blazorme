@@ -1,7 +1,7 @@
 # Blazorme.Diff
 Diff component library for Blazor apps. 
 ## Introduction
-The idea is to render diff of the two input strings in different output display formats. Output is always in HTML and currently 3 output display formats are provided:
+The library will render diff of the two input strings in different output display formats. Output is always in HTML and currently 3 output display formats are provided:
 * Inline: Inlined format. Intented for HTML inputs although plain text can also be used.
 * Row: Line by line format for text inputs.
 * Column: Side by side format for text inputs.
