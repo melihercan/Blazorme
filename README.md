@@ -92,7 +92,7 @@ Also OutputFormat is Inline by default, hence no need to specify the OutputForma
   <Diff FirstInput="first input text"
         SecondInput="second input text"
         FirstTitle="first title text displayed on the top of the rendered table"
-        SecondTitle="second title text displayed on the top of the rendered able"
+        SecondTitle="second title text displayed on the top of the rendered table"
         OutputFormat=@DiffOutputFormat.Row />
         or
         OutputFormat=@DiffOutputFormat.Column />
