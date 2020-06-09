@@ -1,5 +1,5 @@
 # Blazorme.Diff
-Diff component library for Blazor apps. 
+Diff component library for Blazor apps. [NuGet](https://www.nuget.org/packages/Blazorme.Diff/)
 ## Introduction
 The library will render diff of the two input strings in different output display formats. Output is always in HTML and currently 3 output display formats are provided:
 * Inline: Inlined format. Intented for HTML inputs although plain text can also be used.
@@ -92,7 +92,7 @@ Also OutputFormat is Inline by default, hence no need to specify the OutputForma
   <Diff FirstInput="first input text"
         SecondInput="second input text"
         FirstTitle="first title text displayed on the top of the rendered table"
-        SecondTitle="second title text displayed on the top of the rendered able"
+        SecondTitle="second title text displayed on the top of the rendered table"
         OutputFormat=@DiffOutputFormat.Row />
         or
         OutputFormat=@DiffOutputFormat.Column />
