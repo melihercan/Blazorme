@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\.gitattributes">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
 <!--
     <PackageReference Include="Blazorme.Diff" Version="1.0.0" />
 -->    
