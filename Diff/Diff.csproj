@@ -19,11 +19,17 @@ It can also be used as a library to get diff or html diff output strings from co
     <PackageTags>blazor diff components</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
+    <PackageIcon>me.png</PackageIcon>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="LICENSE" />
     <None Remove="LICENSE" />
+    <None Include="..\images\me.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 
