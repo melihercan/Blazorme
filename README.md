@@ -8,7 +8,7 @@ The library will render diff of the two input strings in different output displa
 
 Please use `TestApp` as a reference for your implementation. 
 
-![alt text](https://github.com/melihercan/gifs/blob/master/Diff.gif)
+![alt text](https://github.com/melihercan/Blazorme/blob/master/images/Diff.gif)
 ## Third Party Packages
 The following packages have been used:
 * htmldiff.net: [GitHub](https://github.com/Rohland/htmldiff.net), [NuGet](https://www.nuget.org/packages/htmldiff.net/) 
