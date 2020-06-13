@@ -1,8 +1,5 @@
 ﻿using Diff;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Blazorme
@@ -19,7 +16,7 @@ namespace Blazorme
         public async Task<string> GetAsync(string firstInput, string secondInput, 
             string firstTitle = DiffInputTitle.First, string secondTitle = DiffInputTitle.Second)
         {
-            return await DiffJsInterop.GetAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle);
+            return await JsInterop.GetAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle);
         }
              
         public async Task<string> GetHtmlAsync(string firstInput, string secondInput,
@@ -32,7 +29,7 @@ namespace Blazorme
             }
             else
             {
-                return await DiffJsInterop.GetHtmlAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle, 
+                return await JsInterop.GetHtmlAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle, 
                     outputFormat);
             }
         }

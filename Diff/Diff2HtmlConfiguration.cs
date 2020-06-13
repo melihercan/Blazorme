@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Diff
+﻿namespace Diff
 {
-
     internal class Diff2HtmlConfiguration
     {
         // "line-by-line" or "side-by-side", default is "line-by-line"

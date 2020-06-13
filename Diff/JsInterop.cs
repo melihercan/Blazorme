@@ -1,16 +1,11 @@
 ﻿using Blazorme;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Diff;
 
-namespace Blazorme
+namespace Diff
 {
-    internal class DiffJsInterop
+    internal class JsInterop
     {
-
         internal static async ValueTask<string> GetAsync(IJSRuntime jsRuntime, 
             string firstInput, string secondInput,
             string firstTitle, string secondTitle)
@@ -21,7 +16,6 @@ namespace Blazorme
                 {
                     firstTitle, secondTitle, firstInput, secondInput
                 });
-
         }
 
         internal static async ValueTask<string> GetHtmlAsync(IJSRuntime jsRuntime, 
@@ -62,6 +56,5 @@ namespace Blazorme
                 _ => string.Empty,
             };
         }
-
     }
 }

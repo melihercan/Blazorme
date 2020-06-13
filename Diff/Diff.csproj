@@ -15,7 +15,7 @@ It can also be used as a library to get diff or html diff output strings from co
     <PackageLicenseFile></PackageLicenseFile>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
-    <PackageReleaseNotes>First version.</PackageReleaseNotes>
+    <PackageReleaseNotes>Cleanup.</PackageReleaseNotes>
     <PackageTags>blazor diff components</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
