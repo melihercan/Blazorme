@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diff", "Diff\Diff.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApp", "DemoApp\DemoApp.csproj", "{E07C5945-7953-4D4A-A3C0-04B423E6BE05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Split", "Split\Split.csproj", "{C0ED2524-2CCA-48ED-B342-86A1AF7CFBF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Split", "Split\Split.csproj", "{C0ED2524-2CCA-48ED-B342-86A1AF7CFBF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

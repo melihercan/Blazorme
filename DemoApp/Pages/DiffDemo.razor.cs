@@ -21,8 +21,10 @@ namespace DemoApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            await base.OnInitializedAsync();
+
             // API usage example.
-           var firstInput = "Hello World";
+            var firstInput = "Hello World";
             var secondInput = "Hell World!";
             var diff = await _diffApi.GetAsync(firstInput, secondInput);
             var diffHtml = await _diffApi.GetHtmlAsync(firstInput, secondInput,
@@ -32,8 +34,6 @@ namespace DemoApp.Pages
             Console.WriteLine(diff);
             Console.WriteLine("diffHtml:");
             Console.WriteLine(diffHtml);
-
-            await base.OnInitializedAsync();
         }
     }
 }

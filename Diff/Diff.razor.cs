@@ -27,16 +27,16 @@ namespace Blazorme
 
         protected override async Task OnInitializedAsync()
         {
-            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat);
-
             await base.OnInitializedAsync();
+
+            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat);
         }
 
         protected override async Task OnParametersSetAsync()
         {
-            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat);
-
             await base.OnParametersSetAsync();
+
+            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat);
         }
     }
 }

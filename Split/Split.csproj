@@ -16,6 +16,7 @@ It provides resizeable split views (panes)</Description>
     <RepositoryType>git</RepositoryType>
     <PackageTags>blazor split resizeable panes components</PackageTags>
     <PackageReleaseNotes>First version.</PackageReleaseNotes>
+    <PackageId>Blazorme.Split</PackageId>
   </PropertyGroup>
 
 
