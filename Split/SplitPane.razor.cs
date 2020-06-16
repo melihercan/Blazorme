@@ -19,7 +19,7 @@ namespace Blazorme
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        private ElementReference _elementReference = new ElementReference(Guid.NewGuid().ToString());
+        public ElementReference ElementReference;
 
         protected override void OnInitialized()
         {

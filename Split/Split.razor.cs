@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
+using Split;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blazorme
 {
@@ -53,11 +56,38 @@ namespace Blazorme
             base.OnInitialized();
         }
 
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            base.OnAfterRender(firstRender);
+            await base.OnAfterRenderAsync(firstRender);
 
-            //// TODO: INVOKE JS INTEROP HERE
+            if(firstRender)
+            {
+                await JsInterop.InvokeAsync(_jsRuntime,
+                    _splitPanes.Select(splitPane => splitPane.ElementReference).ToArray(),
+                    new Options
+                    {
+                        Sizes = _splitPanes.Select(splitPane => splitPane.SizeInPercentage).ToArray(),
+                        MinSizes = _splitPanes.Select(splitPane => splitPane.MinSize ?? DefaultMinSize).ToArray(),
+                        ExpandToMin = ExpandToMin,
+                        GutterSize = GutterSize,
+                        GutterAlign = GutterAlign switch
+                        {
+                            SplitGutterAlign.Start => "start",
+                            SplitGutterAlign.Center => "center",
+                            SplitGutterAlign.End => "end",
+                            _ => "center"
+                        },
+                        SnapOffset = SnapOffset,
+                        DragInterval = DragInterval,
+                        Direction = Direction switch
+                        {
+                            SplitDirection.Horizontal => "horizontal",
+                            SplitDirection.Vertical => "vertical",
+                            _ => "horizontal"
+                        },
+                        Cursor = Cursor
+                    });
+            }
         }
     }
 }
