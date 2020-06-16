@@ -5,9 +5,15 @@ namespace Split
 {
     internal class JsInterop
     {
-        public static ValueTask<string> Prompt(IJSRuntime jsRuntime, string message)
+        internal static async ValueTask<object>InvokeAsync(IJSRuntime jsRuntime, string[] elements, Options options)
         {
-            return new ValueTask<string>();
+            return await jsRuntime.InvokeAsync<object>(
+                "Split",
+                new object[]
+                {
+                    elements,
+                    options
+                });
         }
     }
 }

@@ -11,8 +11,15 @@ namespace Blazorme
         private Split _split { get; set; }
 
         [Parameter]
+        public int SizeInPercentage { get; set; }
+
+        [Parameter]
+        public int? MinSize { get; set; }
+
+        [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        private ElementReference _elementReference = new ElementReference(Guid.NewGuid().ToString());
 
         protected override void OnInitialized()
         {
@@ -20,7 +27,7 @@ namespace Blazorme
 
             if(_split == null)
             {
-                throw new Exception("SplitPane should be child of Split");
+                throw new Exception("SplitPane should be a child of Split");
             }
             _split.AddSplitPane(this);
         }
