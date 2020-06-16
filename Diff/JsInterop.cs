@@ -2,7 +2,7 @@
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
-namespace Diff
+namespace BlazormeDiff
 {
     internal class JsInterop
     {
@@ -34,9 +34,9 @@ namespace Diff
                         diff,
                         new Diff2HtmlConfiguration
                         {
-                            drawFileList = false,
-                            matching = Diff2HtmlConfiguration.Words,
-                            outputFormat = Diff2HtmlConfiguration.LineByLine
+                            DrawFileList = false,
+                            Matching = Diff2HtmlConfiguration.Words,
+                            OutputFormat = Diff2HtmlConfiguration.LineByLine
                         }
                     }),
 
@@ -47,9 +47,9 @@ namespace Diff
                         diff,
                         new Diff2HtmlConfiguration
                         {
-                            drawFileList = false,
-                            matching = Diff2HtmlConfiguration.Words,
-                            outputFormat = Diff2HtmlConfiguration.SideBySide
+                            DrawFileList = false,
+                            Matching = Diff2HtmlConfiguration.Words,
+                            OutputFormat = Diff2HtmlConfiguration.SideBySide
                         }
                     }),
 

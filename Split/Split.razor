@@ -1,5 +1,37 @@
 ﻿@namespace Blazorme
 
-<CascadingValue Value="@this">
-    @ChildContent
-</CascadingValue>
+<style>
+    .blazorme-split {
+        width: 100%;
+        height: 100%;
+        flex: 1;
+        display: flex;
+    }
+
+        .blazorme-split[data-direction=Horizontal] {
+            flex-direction: row;
+        }
+
+        .blazorme-split[data-direction=Vertical] {
+            flex-direction: column;
+        }
+
+        .blazorme-split .gutter {
+            background: orange;
+        }
+
+            .blazorme-split .gutter.gutter-horizontal {
+                cursor: ew-resize;
+            }
+
+            .blazorme-split .gutter.gutter-vertical {
+                cursor: ns-resize;
+            }
+</style>
+
+
+<div class="blazorme-split" data-direction="@Direction">
+    <CascadingValue Value="@this">
+        @ChildContent
+    </CascadingValue>
+</div>

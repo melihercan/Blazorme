@@ -6,8 +6,8 @@ namespace Blazorme
 {
     public enum SplitGutterAlign
     {
-        Start,
         Center,
+        Start,
         End,
     }
 }

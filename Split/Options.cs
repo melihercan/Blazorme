@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Split
+namespace BlazormeSplit
 {
-    internal class Options
+    public class Options
     {
-        internal int[] Sizes { get; set; }
-        internal int[] MinSizes { get; set; }
-        internal bool ExpandToMin { get; set; }
-        internal int GutterSize { get; set; }
-        internal string GutterAlign { get; set; }
-        internal int SnapOffset { get; set; }
-        internal int DragInterval { get; set; }
-        internal string Direction { get; set; }
-        internal string Cursor { get; set; }
+        public int[] Sizes { get; set; }
+        public int[] MinSize { get; set; }
+        public bool ExpandToMin { get; set; }
+        public int GutterSize { get; set; }
+        public string GutterAlign { get; set; }
+        public int SnapOffset { get; set; }
+        public int DragInterval { get; set; }
+        public string Direction { get; set; }
+        public string Cursor { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
-using Split;
+using BlazormeSplit;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -67,24 +67,13 @@ namespace Blazorme
                     new Options
                     {
                         Sizes = _splitPanes.Select(splitPane => splitPane.SizeInPercentage).ToArray(),
-                        MinSizes = _splitPanes.Select(splitPane => splitPane.MinSize ?? DefaultMinSize).ToArray(),
+                        MinSize = _splitPanes.Select(splitPane => splitPane.MinSize ?? DefaultMinSize).ToArray(),
                         ExpandToMin = ExpandToMin,
                         GutterSize = GutterSize,
-                        GutterAlign = GutterAlign switch
-                        {
-                            SplitGutterAlign.Start => "start",
-                            SplitGutterAlign.Center => "center",
-                            SplitGutterAlign.End => "end",
-                            _ => "center"
-                        },
+                        GutterAlign = GutterAlign.ToString().ToLower(),
                         SnapOffset = SnapOffset,
                         DragInterval = DragInterval,
-                        Direction = Direction switch
-                        {
-                            SplitDirection.Horizontal => "horizontal",
-                            SplitDirection.Vertical => "vertical",
-                            _ => "horizontal"
-                        },
+                        Direction = Direction.ToString().ToLower(),
                         Cursor = Cursor
                     });
             }

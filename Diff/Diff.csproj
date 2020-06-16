@@ -21,6 +21,8 @@ It can also be used as a library to get diff or html diff output strings from co
     <RepositoryType>git</RepositoryType>
     <PackageIcon>me.png</PackageIcon>
     <Version>1.0.1</Version>
+    <AssemblyName>Diff</AssemblyName>
+    <RootNamespace>BlazormeDiff</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

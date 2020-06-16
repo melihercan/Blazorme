@@ -1,4 +1,4 @@
-﻿using Diff;
+﻿using BlazormeDiff;
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
