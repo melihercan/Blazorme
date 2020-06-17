@@ -8,13 +8,13 @@
     <Company>melihercan</Company>
     <Product>Blazorme.Split</Product>
     <Description>Split component library for Blazor apps.
-It provides resizeable split views (panes)</Description>
+It provides resizeable split views (panes).</Description>
     <Copyright>melihercan 2020</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>me.png</PackageIcon>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>blazor split resizeable panes components</PackageTags>
+    <PackageTags>blazor split resizable panes components</PackageTags>
     <PackageReleaseNotes>First version.</PackageReleaseNotes>
     <PackageId>Blazorme.Split</PackageId>
     <AssemblyName>Split</AssemblyName>
