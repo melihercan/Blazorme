@@ -25,7 +25,7 @@ Add the following line to your `index.html` (WebAsembly) or `_Host.cshtml` (Serv
     <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"></script>
 ```
 ## Usage
-In your Blazor page add the top level `Split` entry and `SplitPane` to form the split view. Here is a simple example:
+In your Blazor page add the top level `Split` entry and `SplitPane` sub-entires to form the split view. Here is a simple example:
 ```html
 <div class="container-fluid border border-primary" style="width: 100%; height: 600px">
     <Split>
@@ -41,5 +41,12 @@ In your Blazor page add the top level `Split` entry and `SplitPane` to form the 
     </Split>
 </div>
 ```
+## Parameters
+### Split
+TODO: ADD PARAMS
+### SplitPane
+TODO: ADD PARAMS
+## Example
+TODO: ADD EXAMPLE FROM DEMOAPP
 
 
