@@ -29,7 +29,7 @@ namespace DemoApp.Pages
             var diff = await _diffApi.GetAsync(firstInput, secondInput);
             var diffHtml = await _diffApi.GetHtmlAsync(firstInput, secondInput,
                 DiffInputTitle.First, DiffInputTitle.Second,
-                DiffOutputFormat.Row);
+                DiffOutputFormat.Row, DiffStyle.Word);
             Console.WriteLine("diff:");
             Console.WriteLine(diff);
             Console.WriteLine("diffHtml:");

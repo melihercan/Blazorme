@@ -14,14 +14,14 @@ namespace Blazorme
         }
 
         public async Task<string> GetAsync(string firstInput, string secondInput, 
-            string firstTitle = DiffInputTitle.First, string secondTitle = DiffInputTitle.Second)
+            string firstTitle, string secondTitle)
         {
             return await JsInterop.GetAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle);
         }
              
         public async Task<string> GetHtmlAsync(string firstInput, string secondInput,
-            string firstTitle = DiffInputTitle.First, string secondTitle = DiffInputTitle.Second,
-            DiffOutputFormat outputFormat = DiffOutputFormat.Inline)
+            string firstTitle, string secondTitle,
+            DiffOutputFormat outputFormat, DiffStyle style)
         {
             if (outputFormat == DiffOutputFormat.Inline)
             {
@@ -30,7 +30,7 @@ namespace Blazorme
             else
             {
                 return await JsInterop.GetHtmlAsync(_jsRuntime, firstInput, secondInput, firstTitle, secondTitle, 
-                    outputFormat);
+                    outputFormat, style);
             }
         }
     }

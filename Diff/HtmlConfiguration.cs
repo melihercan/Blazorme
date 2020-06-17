@@ -1,6 +1,6 @@
 ﻿namespace BlazormeDiff
 {
-    public class Diff2HtmlConfiguration
+    public class HtmlConfiguration
     {
         // "line-by-line" or "side-by-side", default is "line-by-line"
         internal const string SideBySide = "side-by-side";

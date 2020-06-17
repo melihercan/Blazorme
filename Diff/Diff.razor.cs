@@ -25,18 +25,21 @@ namespace Blazorme
         [Parameter]
         public DiffOutputFormat OutputFormat { get; set; } = DiffOutputFormat.Inline;
 
+        [Parameter]
+        public DiffStyle Style { get; set; } = DiffStyle.Word;
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat);
+            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat, Style);
         }
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
 
-            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat);
+            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat, Style);
         }
     }
 }

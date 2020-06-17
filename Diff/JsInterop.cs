@@ -21,10 +21,11 @@ namespace BlazormeDiff
         internal static async ValueTask<string> GetHtmlAsync(IJSRuntime jsRuntime, 
             string firstInput, string secondInput,
             string firstTitle, string secondTitle,
-            DiffOutputFormat outputFormat)
+            DiffOutputFormat outputFormat, DiffStyle style)
         {
             var diff = await GetAsync(jsRuntime, firstInput, secondInput, firstTitle, secondTitle);
 
+            string styleStr = style == DiffStyle.Word ? HtmlConfiguration.Word : HtmlConfiguration.Char;
             return outputFormat switch
             {
                 DiffOutputFormat.Row => await jsRuntime.InvokeAsync<string>(
@@ -32,11 +33,12 @@ namespace BlazormeDiff
                     new object[]
                     {
                         diff,
-                        new Diff2HtmlConfiguration
+                        new HtmlConfiguration
                         {
+                            DiffStyle = styleStr,
                             DrawFileList = false,
-                            Matching = Diff2HtmlConfiguration.Words,
-                            OutputFormat = Diff2HtmlConfiguration.LineByLine
+                            Matching = HtmlConfiguration.Words,
+                            OutputFormat = HtmlConfiguration.LineByLine
                         }
                     }),
 
@@ -45,11 +47,12 @@ namespace BlazormeDiff
                     new object[]
                     {
                         diff,
-                        new Diff2HtmlConfiguration
+                        new HtmlConfiguration
                         {
+                            DiffStyle = styleStr,
                             DrawFileList = false,
-                            Matching = Diff2HtmlConfiguration.Words,
-                            OutputFormat = Diff2HtmlConfiguration.SideBySide
+                            Matching = HtmlConfiguration.Words,
+                            OutputFormat = HtmlConfiguration.SideBySide
                         }
                     }),
 

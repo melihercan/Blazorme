@@ -7,19 +7,11 @@ namespace BlazormeSplit
 {
     internal class JsInterop
     {
-        internal static async ValueTask<object>InvokeAsync(IJSRuntime jsRuntime, ElementReference[] elements, 
+        internal static async ValueTask InvokeAsync(IJSRuntime jsRuntime, ElementReference[] elements, 
             Options options)
         {
-            //return await jsRuntime.InvokeAsync<object>(
-            //    "Split",
-            //    new object[]
-            //    {
-            //        elements,
-            //        options
-            //    });
-
-            return await jsRuntime.InvokeAsync<object>(
-                "blazormeSplit.init",
+            await jsRuntime.InvokeAsync<object>(
+                "Split",
                 new object[]
                 {
                     elements,
