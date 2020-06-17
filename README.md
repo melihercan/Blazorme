@@ -1,5 +1,5 @@
 # Blazorme
-This package provides various component libraries for Blazor apps. 
+This project provides component libraries for Blazor apps. 
 Currently two component libraries are provided:
 * Blazorme.Diff
 * Blazorme.Split
