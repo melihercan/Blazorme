@@ -1,19 +1,22 @@
 # Blazorme.Diff
-Diff component library for Blazor apps. [NuGet](https://www.nuget.org/packages/Blazorme.Diff/) and [Demo](https://melihercan.github.io/)
-## Introduction
-The library will render diff of the two input strings in different output display formats. Output is always in HTML and currently 3 output display formats are provided:
+Diff component library for Blazor apps.
+The library will render diff of the two input strings in different output display formats. Output is always in HTML and currently 3 output display formats are provided via `OutputFormat` parameter:
 * Inline: Inlined format. Intented for HTML inputs although plain text can also be used.
 * Row: Line by line format for text inputs.
 * Column: Side by side format for text inputs.
 
-Please use `TestApp` as a reference for your implementation. 
+For `html diff`, two show difference levels are provided via `Style` parameter:
+* Word: Diff will be displayed based on words. This is default.
+* Char: Diff will be displayed based on characters.
+
+Use `DemoApp` as a reference for your implementation. 
 
 ![alt text](https://github.com/melihercan/Blazorme/blob/master/images/Diff.gif)
 ## Third Party Packages
 The following packages have been used:
 * htmldiff.net: [GitHub](https://github.com/Rohland/htmldiff.net), [NuGet](https://www.nuget.org/packages/htmldiff.net/) 
-* diff: [GitHub](https://github.com/kpdecker/jsdiff), [jsdelivr](https://www.jsdelivr.com/package/npm/diff) 
-* diff2html: [GitHub](https://github.com/rtfpessoa/diff2html), [jsdelivr](https://www.jsdelivr.com/package/npm/diff2html)  
+* diff: [GitHub](https://github.com/kpdecker/jsdiff), [jsdelivr](https://www.jsdelivr.com/package/npm/diff) (JS interop)
+* diff2html: [GitHub](https://github.com/rtfpessoa/diff2html), [jsdelivr](https://www.jsdelivr.com/package/npm/diff2html) (JS interop)  
 ## Installation
 * Install NuGet package:
 ```
@@ -81,7 +84,7 @@ Add the following entires to `Program.cs` in `Main` (WebAssembly) or `Startup.cs
 ## Component Usage
 In your Blazor page add the Diff entry for the desired output format as shown below:
 ### For Inline format
-No need to specify titles for inline as they are are not used for this format.
+No need to specify titles or style for inline as they are are not used for this format.
 Also OutputFormat is Inline by default, hence no need to specify the OutputFormat explicitly.
 ```html
   <Diff FirstInput="first input text"
@@ -93,10 +96,14 @@ Also OutputFormat is Inline by default, hence no need to specify the OutputForma
         SecondInput="second input text"
         FirstTitle="first title text displayed on the top of the rendered table"
         SecondTitle="second title text displayed on the top of the rendered table"
-        OutputFormat=@DiffOutputFormat.Row />
+        OutputFormat=@DiffOutputFormat.Row
+        Style=@DiffStyle.Word />
         or
-        OutputFormat=@DiffOutputFormat.Column />
+        OutputFormat=@DiffOutputFormat.Column
+        Style=@DiffStyle.Char />
 ```
+Two predefined strings are provided for titles: `DiffInputTitle.First` and `DiffInputTitle.Second`.
+
 ## API Usage
 The Diff component can also be used as a library to get `diff` or `html diff` output strings with API calls from code behind. The API interface is defined in `IDiff.cs` as follows:
 ```cs
@@ -105,7 +112,8 @@ The Diff component can also be used as a library to get `diff` or `html diff` ou
 
         public Task<string> GetHtmlAsync(string firstInput, string secondInput,
             string firstTitle = DiffInputTitle.First, string secondTitle = DiffInputTitle.Second,
-            DiffOutputFormat outputFormat = DiffOutputFormat.Inline);
+            DiffOutputFormat outputFormat = DiffOutputFormat.Inline,
+            DiffStyle style = DiffStyle.Word);
 ```
 ### Examples
 Inject IDiff and call API functions. 
@@ -122,7 +130,7 @@ Inject IDiff and call API functions.
             var diff = await DiffApi.GetAsync(firstInput, secondInput);
             var diffHtml = await DiffApi.GetHtmlAsync(firstInput, secondInput, 
                 DiffInputTitle.First, DiffInputTitle.Second, 
-                DiffOutputFormat.Row);
+                DiffOutputFormat.Row, DiffStyle.Word);
         }
 ```
 The above code will produce the following outputs:
