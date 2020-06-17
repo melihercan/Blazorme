@@ -29,6 +29,10 @@ namespace Blazorme
         public SplitGutterAlign GutterAlign { get; set; } = SplitGutterAlign.Center;
 
         [Parameter]
+        public string GutterColor { get; set; } = "#cfcfcf";
+
+
+        [Parameter]
         public int SnapOffset { get; set; } = 30;
 
         [Parameter]
@@ -40,11 +44,11 @@ namespace Blazorme
         [Parameter]
         public string Cursor { get; set; } = "col-resize";
 
-
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
         private List<SplitPane> _splitPanes = new List<SplitPane>();
+
 
         internal void AddSplitPane(SplitPane splitPane)
         {
@@ -66,7 +70,8 @@ namespace Blazorme
                     _splitPanes.Select(splitPane => splitPane.ElementReference).ToArray(),
                     new Options
                     {
-                        Sizes = _splitPanes.Select(splitPane => splitPane.SizeInPercentage).ToArray(),
+                        Sizes = _splitPanes.All(splitPane => splitPane.SizeInPercentage == 0) ? null : 
+                            _splitPanes.Select(splitPane => splitPane.SizeInPercentage).ToArray(),
                         MinSize = _splitPanes.Select(splitPane => splitPane.MinSize ?? DefaultMinSize).ToArray(),
                         ExpandToMin = ExpandToMin,
                         GutterSize = GutterSize,
