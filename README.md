@@ -3,7 +3,7 @@ This project provides component libraries for Blazor apps.
 Currently two component libraries are provided:
 * Blazorme.Diff
 * Blazorme.Split
-
+## Blazorme.Diff
 The library will render diff of the two input strings in different output display formats. Output is always in HTML and currently 3 output display formats are provided:
 * Inline: Inlined format. Intented for HTML inputs although plain text can also be used.
 * Row: Line by line format for text inputs.
