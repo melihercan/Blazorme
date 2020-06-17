@@ -42,7 +42,7 @@ namespace Blazorme
         public SplitDirection Direction { get; set; } = SplitDirection.Horizontal;
 
         [Parameter]
-        public string Cursor { get; set; } = "col-resize";
+        public string Cursor { get; set; } = string.Empty;
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -58,6 +58,17 @@ namespace Blazorme
         protected override void OnInitialized()
         {
             base.OnInitialized();
+            if (string.IsNullOrEmpty(Cursor))
+            {
+                if(Direction == SplitDirection.Horizontal)
+                {
+                    Cursor = "col-resize";
+                }
+                else
+                {
+                    Cursor = "row-resize";
+                }
+            }
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
