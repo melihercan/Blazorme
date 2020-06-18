@@ -81,8 +81,40 @@ Add the following entires to `Program.cs` in `Main` (WebAssembly) or `Startup.cs
       ...
   }
 ```
+## Parameters
+``` cs
+    public class DiffInputTitle
+    {
+        public const string First = "First";
+        public const string Second = "Second";
+    }
+```
+``` cs
+   public enum DiffOutputFormat
+    {
+        Inline,
+        Row,
+        Column,
+    }
+```
+``` cs
+    public enum DiffStyle
+    {
+        Word,
+        Char
+    }
+```
+
+Parameter | Type | Default | Description
+--- | --- | --- | ---
+FirstInput | string | "" | First input string to diff.
+SecondInput | string | "" | Second input string to diff.
+FirstTitle | string | DiffInputTitle.First | First title.
+SecondInput | string | DiffInputTitle.Second | Second title.
+OutputFormat | DiffOutputFormat | DiffOutputFormat.Inline | Output format to display.
+Style | DiffStyle | DiffStyle.Word | Showing difference levels, word or character. 
 ## Component Usage
-In your Blazor page add the Diff entry for the desired output format as shown below:
+In your Blazor page, add the `Diff` entry for the desired output format as shown below:
 ### For Inline format
 No need to specify titles or style for inline as they are are not used for this format.
 Also OutputFormat is Inline by default, hence no need to specify the OutputFormat explicitly.
@@ -102,8 +134,6 @@ Also OutputFormat is Inline by default, hence no need to specify the OutputForma
         OutputFormat=@DiffOutputFormat.Column
         Style=@DiffStyle.Char />
 ```
-Two predefined strings are provided for titles: `DiffInputTitle.First` and `DiffInputTitle.Second`.
-
 ## API Usage
 The Diff component can also be used as a library to get `diff` or `html diff` output strings with API calls from code behind. The API interface is defined in `IDiff.cs` as follows:
 ```cs
@@ -115,7 +145,7 @@ The Diff component can also be used as a library to get `diff` or `html diff` ou
             DiffOutputFormat outputFormat = DiffOutputFormat.Inline,
             DiffStyle style = DiffStyle.Word);
 ```
-### Examples
+### Example
 Inject IDiff and call API functions. 
 ```cs
        [Inject]
