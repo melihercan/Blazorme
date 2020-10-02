@@ -11,7 +11,6 @@ For `html diff`, two show difference levels are provided via `Style` parameter:
 
 Use `DemoApp` as a reference for your implementation. 
 
-![alt text](https://github.com/melihercan/Blazorme/blob/master/doc/Diff.gif)
 ## Third Party Packages
 The following packages have been used:
 * htmldiff.net: [GitHub](https://github.com/Rohland/htmldiff.net), [NuGet](https://www.nuget.org/packages/htmldiff.net/) 
