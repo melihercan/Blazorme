@@ -7,4 +7,4 @@ It can also be used as a library to get diff or html diff output strings from co
 
 You can run the [Demo](https://melihercan.github.io/) here.
 
-![alt text](https://github.com/melihercan/Blazorme/blob/master/images/Blazorme1.gif)
+![alt text](https://github.com/melihercan/Blazorme/blob/master/doc/Blazorme.gif)

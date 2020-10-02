@@ -3,7 +3,7 @@ Split component library for Blazor apps. The library provides resizeable split v
 
 Use `DemoApp` as a reference for your implementation.
 
-![alt text](https://github.com/melihercan/Blazorme/blob/master/images/Split.gif)
+![alt text](https://github.com/melihercan/Blazorme/blob/master/doc/Split.gif)
 ## Implementation
 Currently the library interops by using the `split.js` package: [GitHub](https://github.com/nathancahill/split), [jsdelivr](https://www.jsdelivr.com/package/npm/split.js) 
 ## Installation
