@@ -29,7 +29,7 @@ Cleanup.</PackageReleaseNotes>
   <ItemGroup>
     <None Remove="LICENSE" />
     <None Remove="LICENSE" />
-    <None Include="..\images\me.png">
+    <None Include="..\doc\me.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
@@ -38,8 +38,8 @@ Cleanup.</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="htmldiff.net" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.8" />
   </ItemGroup>
 
 </Project>

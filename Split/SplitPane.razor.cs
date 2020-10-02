@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Blazorme
 {
-    public partial class SplitPane : ComponentBase
+    public partial class SplitPane
     {
         [CascadingParameter]
         private Split _split { get; set; }

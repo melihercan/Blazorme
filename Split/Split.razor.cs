@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Blazorme
 {
-    public partial class Split : ComponentBase
+    public partial class Split
     {
         [Inject]
         private IJSRuntime _jsRuntime { get; set; }

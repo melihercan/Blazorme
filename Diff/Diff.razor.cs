@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Blazorme
 {
-    public partial class Diff : ComponentBase
+    public partial class Diff
     {
         private string _diff { get; set; } = string.Empty;
 

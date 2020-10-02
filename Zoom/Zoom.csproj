@@ -3,28 +3,31 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
+    <RootNamespace>BlazormeZoom</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Blazorme.Zoom</PackageId>
     <Authors>melihercan</Authors>
-    <Company>melihercan</Company>
-    <Product>Blazorme.Split</Product>
-    <Description>Split component library for Blazor apps.
-It provides resizeable split views (panes).</Description>
+    <Product>Blazorme.Zoom</Product>
+    <Description>Zoom component library for Blazor apps.
+It embeds Zoom video conferencing.</Description>
     <Copyright>melihercan 2020</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>me.png</PackageIcon>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>blazor split resizable panes components</PackageTags>
+    <PackageTags>blazor zoom components</PackageTags>
     <PackageReleaseNotes>First version.</PackageReleaseNotes>
-    <PackageId>Blazorme.Split</PackageId>
-    <AssemblyName>Split</AssemblyName>
-    <RootNamespace>BlazormeSplit</RootNamespace>
   </PropertyGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.8" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 
