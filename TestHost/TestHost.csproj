@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>BlazormeTestHost</RootNamespace>
-    <Description>Steve  Sanderson's TestHost implementation as NuGet package from his BlazorUnitTestingPrototype project source code. This library provides helpers to test Blazor components. See the following links for more details:
+    <Description>Steve  Sanderson's TestHost implementation as NuGet package from his BlazorUnitTestingPrototype project source code. This library provides helpers for unit testing of Blazor components. See the following links for more details:
 https://blog.stevensanderson.com/2019/08/29/blazor-unit-testing-prototype/
 https://github.com/SteveSandersonMS/BlazorUnitTestingPrototype
 </Description>
