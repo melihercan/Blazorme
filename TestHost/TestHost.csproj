@@ -3,6 +3,21 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>BlazormeTestHost</RootNamespace>
+    <Description>Steve  Sanderson's TestHost implementation as NuGet package from his BlazorUnitTestingPrototype project source code. This library provides helpers to test Blazor components. See the following links for more details:
+https://blog.stevensanderson.com/2019/08/29/blazor-unit-testing-prototype/
+https://github.com/SteveSandersonMS/BlazorUnitTestingPrototype
+</Description>
+    <PackageId>Blazorme.TestHost</PackageId>
+    <Authors>melihercan</Authors>
+    <Product>Blazorme.TestHost</Product>
+    <Copyright>melihercan 2020</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>me.png</PackageIcon>
+    <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>blazor testing TestHost</PackageTags>
+    <PackageReleaseNotes>First version.</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +27,13 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.10" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.10" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\doc\me.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
