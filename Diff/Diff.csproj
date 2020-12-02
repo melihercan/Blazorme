@@ -22,7 +22,7 @@ Cleanup.</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>me.png</PackageIcon>
     <Version>1.0.1</Version>
-    <AssemblyName>Diff</AssemblyName>
+    <AssemblyName>Blazorme.Diff</AssemblyName>
     <RootNamespace>BlazormeDiff</RootNamespace>
   </PropertyGroup>
 

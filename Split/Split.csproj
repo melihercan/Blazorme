@@ -17,7 +17,7 @@ It provides resizeable split views (panes).</Description>
     <PackageTags>blazor split resizable panes components</PackageTags>
     <PackageReleaseNotes>First version.</PackageReleaseNotes>
     <PackageId>Blazorme.Split</PackageId>
-    <AssemblyName>Split</AssemblyName>
+    <AssemblyName>Blazorme.Split</AssemblyName>
     <RootNamespace>BlazormeSplit</RootNamespace>
   </PropertyGroup>
 
