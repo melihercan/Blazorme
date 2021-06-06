@@ -15,6 +15,7 @@ namespace StreamSaver
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
+
         public ExampleJsInterop(IJSRuntime jsRuntime)
         {
             moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
