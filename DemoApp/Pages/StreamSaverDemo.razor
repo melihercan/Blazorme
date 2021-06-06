@@ -2,6 +2,44 @@
 
 <h3>StreamSaverDemo</h3>
 
+<EditForm Model="@_streamSaverModel">
+    <div class="mt-4">
+        <InputText placeholder="enter file name" @bind-Value="_streamSaverModel.Filename" />
+        <button class="btn btn-secondary" type="submit" @onclick="ClearFilename">
+            Clear                       
+        </button>
+    </div>
+
+    <div class="mt-2">
+        <InputText placeholder="enter text" @bind-Value="_streamSaverModel.Text" />
+        <button class="btn btn-secondary" type="submit" @onclick="AddText">
+            Add                        
+        </button>
+        <button class="btn btn-secondary" type="submit" @onclick="ClearText">
+            Clear                        
+        </button>
+    </div>
+
+    <div class="mt-2">
+        <button class="btn btn-secondary" type="submit" @onclick="AddLoremIpsum">
+            Add lorem ipsum                       
+        </button>
+    </div>
+
+    <div class="mt-5 px-5">
+        <button class="btn btn-primary" type="submit" @onclick="AppendAsync">
+            Append                        
+        </button>
+        <button class="btn btn-primary" type="submit" @onclick="Close"> 
+            Close
+        </button>
+        <button class="btn btn-primary" type="submit" @onclick="Reset"> 
+            Reset
+        </button>
+    </div>
+</EditForm>    
+
+
 @code {
 
 }
