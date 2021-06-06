@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Blazorme.Diff</PackageId>
@@ -15,20 +15,17 @@ It can also be used as a library to get diff or html diff output strings from co
     <PackageLicenseFile></PackageLicenseFile>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
-    <PackageReleaseNotes>Added DiffStyle parameter to select diff based on word or character.
-Cleanup.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added .NET 5 support.</PackageReleaseNotes>
     <PackageTags>blazor diff components</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>me.png</PackageIcon>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <AssemblyName>Blazorme.Diff</AssemblyName>
     <RootNamespace>BlazormeDiff</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="LICENSE" />
-    <None Remove="LICENSE" />
     <None Include="..\doc\me.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -36,10 +33,16 @@ Cleanup.</PackageReleaseNotes>
   </ItemGroup>
 
 
-  <ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
     <PackageReference Include="htmldiff.net" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.15" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net5')) ">
+    <PackageReference Include="htmldiff.net" Version="1.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.6" />
   </ItemGroup>
 
 </Project>
