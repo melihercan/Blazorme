@@ -94,22 +94,23 @@ namespace BlazormeStreamSaver
             throw new NotImplementedException();
         }
 
-        public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             try
             {
-                _jsRuntime.CallJsMethodVoid(_writerJsObjectRef, "write", buffer);
+                await _jsRuntime.CallJsMethodVoidAsync(_writerJsObjectRef, "write", buffer);
             }
             catch (Exception ex)
             {
                 var m = ex.Message;
             }
             
-            return Task.CompletedTask;
+         //   return Task.CompletedTask;
         }
 
         public override void Close()
         {
+            _jsRuntime.CallJsMethodVoid(_writerJsObjectRef, "close");
             _jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
             _jsRuntime.DeleteJsObjectRef(_writableStreamJsObjectRef.StreamSaverJsObjectRefId);
             _jsRuntime.DeleteJsObjectRef(_streamSaverJsObjectRef.StreamSaverJsObjectRefId);

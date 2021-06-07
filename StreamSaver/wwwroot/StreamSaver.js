@@ -122,6 +122,16 @@
     }
   }
 
+    function base64ToArrayBuffer(base64) {
+        var raw = window.atob(base64);
+        var rawLength = raw.length;
+        var array = new Uint8Array(new ArrayBuffer(rawLength));
+        for (i = 0; i < rawLength; i++) {
+            array[i] = raw.charCodeAt(i);
+        }
+        return array;
+    }
+
   /**
    * @param  {string} filename filename that should be used
    * @param  {object} options  [description]
@@ -183,8 +193,17 @@
         const transformer = downloadStrategy === 'iframe' ? undefined : {
           // This transformer & flush method is only used by insecure context.
           transform (chunk, controller) {
+
+            try {
+                window.atob(chunk);
+                // Base64 string. Convert to Uint8Array.
+                chunk = base64ToArrayBuffer(chunk);
+            } catch (e) {
+                // Silently fallback.
+            }
+
             if (!(chunk instanceof Uint8Array)) {
-              throw new TypeError('Can only write Uint8Arrays')
+              throw new TypeError('#####Can only write Uint8Arrays')
             }
             bytesWritten += chunk.length
             controller.enqueue(chunk)
@@ -250,9 +269,17 @@
     let chunks = []
 
     return (!useBlobFallback && ts && ts.writable) || new streamSaver.WritableStream({
-      write (chunk) {
+      write(chunk) {
+        try {
+            window.atob(chunk);
+            // Base64 string. Convert to Uint8Array.
+            chunk = base64ToArrayBuffer(chunk);
+        } catch (e) {
+            // Silently fallback.
+        }
+
         if (!(chunk instanceof Uint8Array)) {
-          throw new TypeError('Can only write Uint8Arrays')
+          throw new TypeError('*****Can only write Uint8Arrays')
         }
         if (useBlobFallback) {
           // Safari... The new IE6
