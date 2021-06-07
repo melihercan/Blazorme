@@ -9,6 +9,6 @@ namespace Blazorme
 {
     public interface IStreamSaver
     {
-        Task CopyToAsync(Stream stream);
+        Task<Stream> CreateWritableFileStreamAsync(string fileName);
     }
 }

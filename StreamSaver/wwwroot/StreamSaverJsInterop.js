@@ -2,7 +2,7 @@
 
     let streamSaver = {};
 
-    // Use same value on .NET side, "JsObjectRef.cs".
+    // Use same value on .NET side, "StreamSaverJsObjectRef.cs".
     const streamSaverJsObjectRefKey = '__streamSaverJsObjectRefId';
 
     let streamSaverObjectRefs = {};
@@ -139,7 +139,7 @@
      * @param {string} interface: Interface(class) name to be created.
      * @param {...any} args: Argument list of the constructor.
      */
-    streamSaver.createObject = function (parent, interface, ...args) {
+     export function createObject(parent, interface, ...args) {
         let parentObject = getParentObject(parent);;
         let interfaceObject = getPropertyObject(parentObject, interface);
         let createdObject = new interfaceObject(args);

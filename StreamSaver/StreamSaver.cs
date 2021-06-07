@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using BlazormeStreamSaver;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,43 +11,58 @@ namespace Blazorme
 {
     public class StreamSaver : IStreamSaver, IAsyncDisposable
     {
-        private readonly Lazy<Task<IJSObjectReference>> streamSaverModuleTask;
-        private readonly Lazy<Task<IJSObjectReference>> polyfillModuleTask;
-        private readonly Lazy<Task<IJSObjectReference>> jsInteropModuleTask;
+        //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
+        ///  JSISOLATION ONLY WORKS WITH MODULES THAT EXPORT FUNCTIONS. 
+        ////private readonly Lazy<Task<IJSObjectReference>> _streamSaverModuleTask;
+        ////private readonly Lazy<Task<IJSObjectReference>> _polyfillModuleTask;
+        ////private readonly Lazy<Task<IJSObjectReference>> _jsInteropModuleTask;
+
+
+        private readonly IJSRuntime _jsRuntime;
 
         public StreamSaver(IJSRuntime jsRuntime)
         {
-            streamSaverModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               "import", "./_content/StreamSaver/StreamSaver.min.js").AsTask());
-            polyfillModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               "import", "./_content/StreamSaver/polyfill.min.js").AsTask());
-            jsInteropModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               "import", "./_content/StreamSaver/StreamSaverJsInterop.js").AsTask());
+            //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
+            //_streamSaverModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
+            //   "import", "./_content/Blazorme.StreamSaver/StreamSaver.min.js").AsTask());
+            //_polyfillModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
+            //   "import", "./_content/Blazorme.StreamSaver/polyfill.min.js").AsTask());
+            //_jsInteropModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
+            //   "import", "./_content/Blazorme.StreamSaver/StreamSaverJsInterop.js").AsTask());
+
+            _jsRuntime = jsRuntime;
         }
 
-        public async Task CopyToAsync(Stream stream)
+        public Task<Stream> CreateWritableFileStreamAsync(string fileName)
         {
-            var module = await streamSaverModuleTask.Value;
-            await module.InvokeAsync<string>("showPrompt", stream);
+            //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
+            //return new WritableFileStream(
+            //    await _streamSaverModuleTask.Value,
+            //    await _jsInteropModuleTask.Value,
+            //    fileName);
+
+            return Task.FromResult((Stream)new WritableFileStream(_jsRuntime, fileName));
         }
 
-        public async ValueTask DisposeAsync()
+        public ValueTask DisposeAsync() 
         {
-            if (streamSaverModuleTask.IsValueCreated)
-            {
-                var streamSaverModule = await streamSaverModuleTask.Value;
-                await streamSaverModule.DisposeAsync();
-            }
-            if (streamSaverModuleTask.IsValueCreated)
-            {
-                var polyfillModule = await polyfillModuleTask.Value;
-                await polyfillModule.DisposeAsync();
-            }
-            if (jsInteropModuleTask.IsValueCreated)
-            {
-                var jsInteropModule = await jsInteropModuleTask.Value;
-                await jsInteropModule.DisposeAsync();
-            }
+            //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
+            //if (_streamSaverModuleTask.IsValueCreated)
+            //{
+            //    var streamSaverModule = await _streamSaverModuleTask.Value;
+            //    await streamSaverModule.DisposeAsync();
+            //}
+            //if (_streamSaverModuleTask.IsValueCreated)
+            //{
+            //    var polyfillModule = await _polyfillModuleTask.Value;
+            //    await polyfillModule.DisposeAsync();
+            //}
+            //if (_jsInteropModuleTask.IsValueCreated)
+            //{
+            //    var jsInteropModule = await _jsInteropModuleTask.Value;
+            //    await jsInteropModule.DisposeAsync();
+            //}
+            return ValueTask.CompletedTask;
         }
     }
 }

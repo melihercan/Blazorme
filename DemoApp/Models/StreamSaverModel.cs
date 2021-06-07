@@ -8,7 +8,8 @@ namespace DemoApp.Models
     public class StreamSaverModel
     {
         public string Filename { get; set; }
+        public bool FilenameDisabled { get; set; }
         public string Text { get; set; }
-        public string LoremIpsum { get; set; }
+        public int NumLoremIpsum { get; set; }
     }
 }
