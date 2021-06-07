@@ -1,6 +1,6 @@
 ﻿StreamSaverJsInterop = (function () {
 
-    let streamSaver = {};
+    let public = {};
 
     // Use same value on .NET side, "StreamSaverJsObjectRef.cs".
     const streamSaverJsObjectRefKey = '__streamSaverJsObjectRefId';
@@ -139,7 +139,7 @@
      * @param {string} interface: Interface(class) name to be created.
      * @param {...any} args: Argument list of the constructor.
      */
-     export function createObject(parent, interface, ...args) {
+    public.createObject = function (parent, interface, ...args) {
         let parentObject = getParentObject(parent);;
         let interfaceObject = getPropertyObject(parentObject, interface);
         let createdObject = new interfaceObject(args);
@@ -152,7 +152,7 @@
      * 
      * @param {number} id
      */
-    streamSaver.deleteObjectRef = function (id) {
+    public.deleteObjectRef = function (id) {
         delete streamSaverObjectRefs[id];
     }
 
@@ -164,7 +164,7 @@
      *                      JS object first.
      * @param {string} property: String specifying the property to get. If 'null', parent object will be returned.
      */
-    streamSaver.getPropertyObjectRef = function (parent, property) {
+    public.getPropertyObjectRef = function (parent, property) {
         let parentObject = getParentObject(parent);
 
         let propertyObject = getPropertyObject(parentObject, property);
@@ -187,7 +187,7 @@
      * @param {string} contentSpec: Filter of the content to be returned. 'null' indicates that JS object reference
      *                              shall be returned if property specifies an 'object'
      */
-    streamSaver.getPropertyValue = function (parent, property, contentSpec) {
+    public.getPropertyValue = function (parent, property, contentSpec) {
         let parentObject = getParentObject(parent);
 
         let propertyObject = getPropertyObject(parentObject, property);
@@ -207,7 +207,7 @@
      *                      JS object first.
      * @param {string} property: String specifying the property to get. If 'null', parent object will be returned.
      */
-    streamSaver.getPropertyArray = function (parent, property) {
+    public.getPropertyArray = function (parent, property) {
         let parentObject = getParentObject(parent);
         let arrayObject = getPropertyObject(parentObject, property);
         if (Array.isArray(arrayObject)) {
@@ -234,7 +234,7 @@
      *                     converted into a JS object by the reviver. If it is a string, it will be converted into
      *                     JS object first.
      */
-    streamSaver.setProperty = function (parent, property, value) {
+    public.setProperty = function (parent, property, value) {
         let parentObject = getParentObject(parent);
     //    let valueObject;
     //    if (typeof (value) === 'string') {
@@ -257,7 +257,7 @@
      * @param {string} method: String specifying the method to be called.
      * @param {...any} args: Argument list of the method.
      */
-    streamSaver.callMethod = function (parent, method, ...args) {
+    public.callMethod = function (parent, method, ...args) {
         let parentObject = getParentObject(parent);
         let methodObject = getPropertyObject(parentObject, method);
         let ret = methodObject.apply(parentObject, args);
@@ -281,7 +281,7 @@
      * @param {string} method: String specifying the method to be called.
      * @param {...any} args: Argument list of the method.
      */
-    streamSaver.callMethodAsync = async function (parent, method, ...args) {
+    public.callMethodAsync = async function (parent, method, ...args) {
         let parentObject = getParentObject(parent);
         let methodObject = getPropertyObject(parentObject, method);
         let ret = await methodObject.apply(parentObject, args);
@@ -295,6 +295,6 @@
         }
     }
 
-    return streamSaver;
+    return public;
 
 })();

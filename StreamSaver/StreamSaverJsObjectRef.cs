@@ -3,7 +3,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace WebRTCme.Bindings.Blazor.Interops
+namespace BlazormeStreamSaver
 {
     public class StreamSaverJsObjectRef
     {

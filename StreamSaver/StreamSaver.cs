@@ -33,15 +33,16 @@ namespace Blazorme
             _jsRuntime = jsRuntime;
         }
 
-        public Task<Stream> CreateWritableFileStreamAsync(string fileName)
+        public async Task<Stream> CreateWritableFileStreamAsync(string fileName)
         {
             //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
             //return new WritableFileStream(
             //    await _streamSaverModuleTask.Value,
             //    await _jsInteropModuleTask.Value,
             //    fileName);
-
-            return Task.FromResult((Stream)new WritableFileStream(_jsRuntime, fileName));
+            var writeableFileStream = new WritableFileStream(_jsRuntime, fileName);
+            await writeableFileStream.CreateAsync();
+            return writeableFileStream;
         }
 
         public ValueTask DisposeAsync() 

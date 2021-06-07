@@ -16,6 +16,8 @@ namespace BlazormeStreamSaver
         //private readonly IJSObjectReference _jsInteropModule;
         private readonly IJSRuntime _jsRuntime;
         private readonly string _fileName;
+        private StreamSaverJsObjectRef _writableStreamJsObjectRef;
+        private StreamSaverJsObjectRef _writerJsObjectRef;
 
         public WritableFileStream(IJSRuntime jsRuntime, string fileName)
         {
@@ -31,6 +33,24 @@ namespace BlazormeStreamSaver
         //    _jsInteropModule = jsInteropModule;
         //    _fileName = fileName;
         //}
+
+        public Task CreateAsync()
+        {
+            _writerJsObjectRef = _jsRuntime.GetJsPropertyObjectRef("window", "streamSaver");
+
+
+            //_writableStreamJsObjectRef = await _jsRuntime.InvokeAsync<StreamSaverJsObjectRef>(
+            //    "streamSaver.createWriteStream",
+            //    _fileName);
+
+            //_writerJsObjectRef = await _jsRuntime.InvokeAsync<StreamSaverJsObjectRef>(
+            //    _writableStreamJsObjectRef,
+            //    "getWriter");
+
+            _jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
+
+            return Task.CompletedTask;
+        }
 
         public override bool CanRead => false;
 
