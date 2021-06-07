@@ -16,6 +16,7 @@ namespace BlazormeStreamSaver
         //private readonly IJSObjectReference _jsInteropModule;
         private readonly IJSRuntime _jsRuntime;
         private readonly string _fileName;
+        private StreamSaverJsObjectRef _streamSaverJsObjectRef;
         private StreamSaverJsObjectRef _writableStreamJsObjectRef;
         private StreamSaverJsObjectRef _writerJsObjectRef;
 
@@ -36,18 +37,20 @@ namespace BlazormeStreamSaver
 
         public Task CreateAsync()
         {
-            _writerJsObjectRef = _jsRuntime.GetJsPropertyObjectRef("window", "streamSaver");
+            _streamSaverJsObjectRef = _jsRuntime.GetJsPropertyObjectRef("window", "streamSaver");
+            _writableStreamJsObjectRef = _jsRuntime.CallJsMethod<StreamSaverJsObjectRef>(
+                _streamSaverJsObjectRef,
+                "createWriteStream",
+                _fileName);
+            _writerJsObjectRef = _jsRuntime.CallJsMethod<StreamSaverJsObjectRef>(
+                _writableStreamJsObjectRef,
+                "getWriter");
 
+            ///            _jsRuntime.CallJsMethodVoid(_writerJsObjectRef, "close");
+            ////_jsRuntime.CallJsMethodVoid(_writableStreamJsObjectRef, "close");
 
-            //_writableStreamJsObjectRef = await _jsRuntime.InvokeAsync<StreamSaverJsObjectRef>(
-            //    "streamSaver.createWriteStream",
-            //    _fileName);
-
-            //_writerJsObjectRef = await _jsRuntime.InvokeAsync<StreamSaverJsObjectRef>(
-            //    _writableStreamJsObjectRef,
-            //    "getWriter");
-
-            _jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
+            ////_jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
+            ////_jsRuntime.DeleteJsObjectRef(_writableStreamJsObjectRef.StreamSaverJsObjectRefId);
 
             return Task.CompletedTask;
         }
@@ -93,15 +96,28 @@ namespace BlazormeStreamSaver
 
         public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
+            try
+            {
+                _jsRuntime.CallJsMethodVoid(_writerJsObjectRef, "write", buffer);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+            }
+            
             return Task.CompletedTask;
         }
 
         public override void Close()
         {
+            _jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
+            _jsRuntime.DeleteJsObjectRef(_writableStreamJsObjectRef.StreamSaverJsObjectRefId);
+            _jsRuntime.DeleteJsObjectRef(_streamSaverJsObjectRef.StreamSaverJsObjectRefId);
         }
 
         public override async ValueTask DisposeAsync()
         {
+            Close();
             await base.DisposeAsync();
         }
 
