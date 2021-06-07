@@ -24,9 +24,6 @@ namespace DemoApp.Pages
         [Inject]
         private IStreamSaver StreamSaver { get; set; }
 
-    [Inject]
-    private IJSRuntime JsRuntime { get; set; }
-
         private void ClearFilename()
         {
             _streamSaverModel.Filename = string.Empty;
@@ -50,10 +47,6 @@ namespace DemoApp.Pages
 
         private async Task AppendAsync()
         {
-            //var interop = new ExampleJsInterop(JsRuntime);
-            //await interop.Prompt("hello there");
-
-
             _writableFileStream ??= await StreamSaver.CreateWritableFileStreamAsync(_streamSaverModel.Filename);
             await _writableFileStream.WriteAsync(Encoding.UTF8.GetBytes(_stringBuilder.ToString()));
 
