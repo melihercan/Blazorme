@@ -108,19 +108,14 @@ namespace BlazormeStreamSaver
          //   return Task.CompletedTask;
         }
 
-        public override void Close()
+        public override async ValueTask DisposeAsync()
         {
-            _jsRuntime.CallJsMethodVoid(_writerJsObjectRef, "close");
+            await _jsRuntime.CallJsMethodVoidAsync(_writerJsObjectRef, "close");
             _jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
             _jsRuntime.DeleteJsObjectRef(_writableStreamJsObjectRef.StreamSaverJsObjectRefId);
             _jsRuntime.DeleteJsObjectRef(_streamSaverJsObjectRef.StreamSaverJsObjectRefId);
-        }
-
-        public override async ValueTask DisposeAsync()
-        {
             Close();
             await base.DisposeAsync();
         }
-
     }
 }

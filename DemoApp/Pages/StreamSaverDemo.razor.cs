@@ -57,15 +57,14 @@ namespace DemoApp.Pages
             await Task.Delay(1);
         }
 
-        private Task CloseAsync()
+        private async Task CloseAsync()
         {
-            Reset();
-            return Task.CompletedTask;
+            await ResetAsync();
         }
 
-        private void Reset()
+        private async Task ResetAsync()
         {
-            _writableFileStream?.Close();
+            await _writableFileStream?.DisposeAsync().AsTask();
             _writableFileStream = null;
             _stringBuilder.Clear();
             ClearFilename();
