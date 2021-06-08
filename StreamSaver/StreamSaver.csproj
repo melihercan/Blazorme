@@ -4,6 +4,18 @@
     <TargetFrameworks>net5.0</TargetFrameworks>
     <RootNamespace>BlazormeStreamSaver</RootNamespace>
     <AssemblyName>Blazorme.StreamSaver</AssemblyName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>melihercan</Authors>
+    <Description>JSInterop of StreamSaver (https://github.com/jimmywarting/StreamSaver.js) package for Blazor WASM. 
+With this package, you can download very large files without overflowing the memory as it writes incoming data chunks directly to the file instead of accumulating them in memory.</Description>
+    <Copyright>melihercan2021</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>me.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>blazor file download writable stream</PackageTags>
+    <PackageReleaseNotes>Creation</PackageReleaseNotes>
   </PropertyGroup>
 
   
@@ -17,6 +29,13 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net5')) ">
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\doc\me.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

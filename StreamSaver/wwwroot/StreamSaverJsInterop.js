@@ -1,6 +1,6 @@
 ﻿StreamSaverJsInterop = (function () {
 
-    let public = {};
+    let publicStreamSaver = {};
 
     // Use same value on .NET side, "StreamSaverJsObjectRef.cs".
     const streamSaverJsObjectRefKey = '__streamSaverJsObjectRefId';
@@ -21,17 +21,17 @@
         }
     })
 
-    getParentObject = function (parent) {
+    getParentObjectStreamSaver = function (parent) {
         let parentObject;
         if (typeof (parent) === 'string') {
-            parentObject = getPropertyObject(window, parent);
+            parentObject = getPropertyObjectStreamSaver(window, parent);
         } else {
             parentObject = parent;
         }
         return parentObject;
     }
 
-    addObjectRef = function (object) {
+    addObjectRefStreamSaver = function (object) {
         let id = streamSaverObjectRefId++;
         streamSaverObjectRefs[id] = object;
         let objectRef = {};
@@ -39,7 +39,7 @@
         return objectRef;
     }
 
-    getPropertyObject = function (parentObject, property) {
+    getPropertyObjectStreamSaver = function (parentObject, property) {
         if (property === null) {
             return parentObject;
         }
@@ -59,7 +59,7 @@
         return object;
     }
 
-    getObjectContent = function (object, accumulatedContent, contentSpec) {
+    getObjectContentStreamSaver = function (object, accumulatedContent, contentSpec) {
         if (contentSpec === false) {
             return undefined;
         }
@@ -100,7 +100,7 @@
                     for (let j = 0; j < currentMember.length; j++) {
                         const arrayItem = currentMember[j];
                         if (typeof arrayItem === 'object') {
-                            content[i].push(getObjectContent(arrayItem, accumulatedContent, currentMemberSpec));
+                            content[i].push(getObjectContentStreamSaver(arrayItem, accumulatedContent, currentMemberSpec));
                         } else {
                             content[i].push(arrayItem);
                         }
@@ -109,7 +109,7 @@
                     if (currentMember.length === 0) {
                         content[i] = [];
                     } else {
-                        content[i] = getObjectContent(currentMember, accumulatedContent, currentMemberSpec);
+                        content[i] = getObjectContentStreamSaver(currentMember, accumulatedContent, currentMemberSpec);
                     }
                 }
             } else {
@@ -126,7 +126,7 @@
 
     /*
      *
-     * public API
+     * publicStreamSaver API
      *
      */
 
@@ -139,11 +139,11 @@
      * @param {string} interface: Interface(class) name to be created.
      * @param {...any} args: Argument list of the constructor.
      */
-    public.createObject = function (parent, interface, ...args) {
-        let parentObject = getParentObject(parent);;
-        let interfaceObject = getPropertyObject(parentObject, interface);
+    publicStreamSaver.createObjectStreamSaver = function (parent, interface, ...args) {
+        let parentObject = getParentObjectStreamSaver(parent);;
+        let interfaceObject = getPropertyObjectStreamSaver(parentObject, interface);
         let createdObject = new interfaceObject(args);
-        let objectRef = addObjectRef(createdObject);
+        let objectRef = addObjectRefStreamSaver(createdObject);
         return objectRef;
     }
 
@@ -152,7 +152,7 @@
      * 
      * @param {number} id
      */
-    public.deleteObjectRef = function (id) {
+    publicStreamSaver.deleteObjectRefStreamSaver = function (id) {
         delete streamSaverObjectRefs[id];
     }
 
@@ -164,12 +164,12 @@
      *                      JS object first.
      * @param {string} property: String specifying the property to get. If 'null', parent object will be returned.
      */
-    public.getPropertyObjectRef = function (parent, property) {
-        let parentObject = getParentObject(parent);
+    publicStreamSaver.getPropertyObjectRefStreamSaver = function (parent, property) {
+        let parentObject = getParentObjectStreamSaver(parent);
 
-        let propertyObject = getPropertyObject(parentObject, property);
+        let propertyObject = getPropertyObjectStreamSaver(parentObject, property);
         if (typeof (propertyObject) === 'object' && propertyObject !== null) {
-            let objectRef = addObjectRef(propertyObject);
+            let objectRef = addObjectRefStreamSaver(propertyObject);
             return objectRef;
         } else {
             return null;
@@ -187,12 +187,12 @@
      * @param {string} contentSpec: Filter of the content to be returned. 'null' indicates that JS object reference
      *                              shall be returned if property specifies an 'object'
      */
-    public.getPropertyValue = function (parent, property, contentSpec) {
-        let parentObject = getParentObject(parent);
+    publicStreamSaver.getPropertyValueStreamSaver = function (parent, property, contentSpec) {
+        let parentObject = getParentObjectStreamSaver(parent);
 
-        let propertyObject = getPropertyObject(parentObject, property);
+        let propertyObject = getPropertyObjectStreamSaver(parentObject, property);
         if (typeof (propertyObject) === 'object' && contentSpec !== null) {
-            let value = getObjectContent(propertyObject, [], contentSpec);
+            let value = getObjectContentStreamSaver(propertyObject, [], contentSpec);
             return value;
         } else {
             return propertyObject;
@@ -207,13 +207,13 @@
      *                      JS object first.
      * @param {string} property: String specifying the property to get. If 'null', parent object will be returned.
      */
-    public.getPropertyArray = function (parent, property) {
-        let parentObject = getParentObject(parent);
-        let arrayObject = getPropertyObject(parentObject, property);
+    publicStreamSaver.getPropertyArrayStreamSaver = function (parent, property) {
+        let parentObject = getParentObjectStreamSaver(parent);
+        let arrayObject = getPropertyObjectStreamSaver(parentObject, property);
         if (Array.isArray(arrayObject)) {
             let objectRefArray = [];
             arrayObject.forEach(object => {
-                let objectRef = addObjectRef(object);
+                let objectRef = addObjectRefStreamSaver(object);
                 objectRefArray.push(objectRef);
             });
             return objectRefArray;
@@ -234,11 +234,11 @@
      *                     converted into a JS object by the reviver. If it is a string, it will be converted into
      *                     JS object first.
      */
-    public.setProperty = function (parent, property, value) {
-        let parentObject = getParentObject(parent);
+    publicStreamSaver.setPropertyStreamSaver = function (parent, property, value) {
+        let parentObject = getParentObjectStreamSaver(parent);
     //    let valueObject;
     //    if (typeof (value) === 'string') {
-    //        valueObject = getPropertyObject(window, value);
+    //        valueObject = getPropertyObjectStreamSaver(window, value);
     //    } else {
     //        valueObject = value;
     //    }
@@ -257,13 +257,13 @@
      * @param {string} method: String specifying the method to be called.
      * @param {...any} args: Argument list of the method.
      */
-    public.callMethod = function (parent, method, ...args) {
-        let parentObject = getParentObject(parent);
-        let methodObject = getPropertyObject(parentObject, method);
+    publicStreamSaver.callMethodStreamSaver = function (parent, method, ...args) {
+        let parentObject = getParentObjectStreamSaver(parent);
+        let methodObject = getPropertyObjectStreamSaver(parentObject, method);
         let ret = methodObject.apply(parentObject, args);
         if (ret !== undefined) {
             if (ret !== null && typeof (ret) === 'object') {
-                let objectRef = addObjectRef(ret);
+                let objectRef = addObjectRefStreamSaver(ret);
                 return objectRef;
             } else {
                 return ret;
@@ -281,13 +281,13 @@
      * @param {string} method: String specifying the method to be called.
      * @param {...any} args: Argument list of the method.
      */
-    public.callMethodAsync = async function (parent, method, ...args) {
-        let parentObject = getParentObject(parent);
-        let methodObject = getPropertyObject(parentObject, method);
+    publicStreamSaver.callMethodStreamSaverAsync = async function (parent, method, ...args) {
+        let parentObject = getParentObjectStreamSaver(parent);
+        let methodObject = getPropertyObjectStreamSaver(parentObject, method);
         let ret = await methodObject.apply(parentObject, args);
         if (ret !== undefined) {
             if (ret !== null && typeof (ret) === 'object') {
-                let objectRef = addObjectRef(ret);
+                let objectRef = addObjectRefStreamSaver(ret);
                 return objectRef;
             } else {
                 return ret;
@@ -295,6 +295,6 @@
         }
     }
 
-    return public;
+    return publicStreamSaver;
 
 })();

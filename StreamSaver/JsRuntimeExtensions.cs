@@ -20,14 +20,14 @@ namespace BlazormeStreamSaver
             {
                 invokeParams = invokeParams.Concat(args).ToArray();
             }
-            var jsObjectRef = jsRuntime.Invoke<StreamSaverJsObjectRef>("StreamSaverJsInterop.createObject", invokeParams);
+            var jsObjectRef = jsRuntime.Invoke<StreamSaverJsObjectRef>("StreamSaverJsInterop.createObjectStreamSaver", invokeParams);
             return jsObjectRef;
         }
 
         public static void DeleteJsObjectRef(this IJSRuntime jsRuntime,  int id)
         {
             jsRuntime.Invoke<object>(
-                "StreamSaverJsInterop.deleteObjectRef",
+                "StreamSaverJsInterop.deleteObjectRefStreamSaver",
                 new object[]
                 {
                     id,
@@ -38,7 +38,7 @@ namespace BlazormeStreamSaver
             object parent,  string property)
         {
             var jsObjectRef = jsRuntime.Invoke<StreamSaverJsObjectRef>(
-                "StreamSaverJsInterop.getPropertyObjectRef",
+                "StreamSaverJsInterop.getPropertyObjectRefStreamSaver",
                 new object[]
                 {
                     parent,
@@ -52,7 +52,7 @@ namespace BlazormeStreamSaver
             object parent, string property)
         {
             var jsObjectRef = jsRuntime.InvokeAsync<StreamSaverJsObjectRef>(
-                "StreamSaverJsInterop.getPropertyObjectRef",
+                "StreamSaverJsInterop.getPropertyObjectRefStreamSaver",
                 new object[]
                 {
                     parent,
@@ -66,7 +66,7 @@ namespace BlazormeStreamSaver
             string property, object valueSpec = null)
         {
             var content = jsRuntime.Invoke<T>(
-                "StreamSaverJsInterop.getPropertyValue",
+                "StreamSaverJsInterop.getPropertyValueStreamSaver",
                 new object[]
                 {
                     parent,
@@ -80,7 +80,7 @@ namespace BlazormeStreamSaver
             object parent, string property = null)
         {
             var jsObjectRefs = jsRuntime.Invoke<IEnumerable<StreamSaverJsObjectRef>>(
-                "StreamSaverJsInterop.getPropertyArray",
+                "StreamSaverJsInterop.getPropertyArrayStreamSaver",
                 new object[]
                 {
                     parent,
@@ -94,7 +94,7 @@ namespace BlazormeStreamSaver
             string property, object value)
         {
             jsRuntime.InvokeVoid(
-                "StreamSaverJsInterop.setProperty",
+                "StreamSaverJsInterop.setPropertyStreamSaver",
                 new object[]
                 {
                     parent,
@@ -115,7 +115,7 @@ namespace BlazormeStreamSaver
             {
                 invokeParams = invokeParams.Concat(args).ToArray();
             }
-            jsRuntime.InvokeVoid("StreamSaverJsInterop.callMethod", invokeParams);
+            jsRuntime.InvokeVoid("StreamSaverJsInterop.callMethodStreamSaver", invokeParams);
         }
 
         public static T CallJsMethod<T>(this IJSRuntime jsRuntime, object parent,
@@ -130,7 +130,7 @@ namespace BlazormeStreamSaver
             {
                 invokeParams = invokeParams.Concat(args).ToArray();
             }
-            var ret = jsRuntime.Invoke<T>("StreamSaverJsInterop.callMethod", invokeParams);
+            var ret = jsRuntime.Invoke<T>("StreamSaverJsInterop.callMethodStreamSaver", invokeParams);
             return ret;
         }
 
@@ -146,7 +146,7 @@ namespace BlazormeStreamSaver
             {
                 invokeParams = invokeParams.Concat(args).ToArray();
             }
-            return jsRuntime.InvokeVoidAsync("StreamSaverJsInterop.callMethodAsync", invokeParams);
+            return jsRuntime.InvokeVoidAsync("StreamSaverJsInterop.callMethodStreamSaverAsync", invokeParams);
                 //.ConfigureAwait(false);
         }
 
@@ -162,7 +162,7 @@ namespace BlazormeStreamSaver
             {
                 invokeParams = invokeParams.Concat(args).ToArray();
             }
-            var ret = await jsRuntime.InvokeAsync<T>("StreamSaverJsInterop.callMethodAsync", invokeParams)
+            var ret = await jsRuntime.InvokeAsync<T>("StreamSaverJsInterop.callMethodStreamSaverAsync", invokeParams)
                 .ConfigureAwait(false);
             return ret;
         }
