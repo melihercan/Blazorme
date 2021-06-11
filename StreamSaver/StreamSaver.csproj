@@ -38,4 +38,11 @@ With this package, you can download very large files without overflowing the mem
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Private.Runtime.InteropServices.JavaScript">
+      <HintPath>Resources\System.Private.Runtime.InteropServices.JavaScript.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
 </Project>
