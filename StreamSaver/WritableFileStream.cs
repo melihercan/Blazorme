@@ -22,12 +22,6 @@ namespace BlazormeStreamSaver
         private JSObject _writeableStreamJsObject;
         private JSObject _writerJsObject;
 
-
-
-        private StreamSaverJsObjectRef _streamSaverJsObjectRef;
-        private StreamSaverJsObjectRef _writableStreamJsObjectRef;
-        private StreamSaverJsObjectRef _writerJsObjectRef;
-
         public WritableFileStream(IJSRuntime jsRuntime, string fileName)
         {
             _jsRuntime = jsRuntime;
@@ -45,30 +39,10 @@ namespace BlazormeStreamSaver
 
         public Task CreateAsync()
         {
-
-            var windowJsObject = Runtime.GetGlobalObject("window") as JSObject;
-            _streamSaverJsObject = windowJsObject.GetObjectProperty("streamSaver") as JSObject;
-            _writeableStreamJsObject = _streamSaverJsObject.Invoke("createWriteStream", _fileName) as JSObject;
-            _writerJsObject = _writeableStreamJsObject.Invoke("getWriter") as JSObject;
-
-            //_streamSaverJsObjectRef = _jsRuntime.GetJsPropertyObjectRef("window", "streamSaver");
-            //_writableStreamJsObjectRef = _jsRuntime.CallJsMethod<StreamSaverJsObjectRef>(
-            //    _streamSaverJsObjectRef,
-            //    "createWriteStream",
-            //    _fileName);
-            //_writerJsObjectRef = _jsRuntime.CallJsMethod<StreamSaverJsObjectRef>(
-            //    _writableStreamJsObjectRef,
-            //    "getWriter");
-
-
-
-
-            ///            _jsRuntime.CallJsMethodVoid(_writerJsObjectRef, "close");
-            ////_jsRuntime.CallJsMethodVoid(_writableStreamJsObjectRef, "close");
-
-            ////_jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
-            ////_jsRuntime.DeleteJsObjectRef(_writableStreamJsObjectRef.StreamSaverJsObjectRefId);
-
+            var windowJsObject = (JSObject)Runtime.GetGlobalObject("window");
+            _streamSaverJsObject = (JSObject)windowJsObject.GetObjectProperty("streamSaver");
+            _writeableStreamJsObject =  (JSObject)_streamSaverJsObject.Invoke("createWriteStream", _fileName);
+            _writerJsObject = (JSObject)_writeableStreamJsObject.Invoke("getWriter");
             return Task.CompletedTask;
         }
 
@@ -113,28 +87,15 @@ namespace BlazormeStreamSaver
 
         public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
-            try
-            {
-                Uint8Array uint8Array = Uint8Array.From(buffer);
-                ///var utf8Text = Encoding.UTF8.GetString(buffer);
-                var task = (Task)_writerJsObject.Invoke("write", /*utf8Text*//*buffer*/uint8Array);
-                await task;
-                //await _jsRuntime.CallJsMethodVoidAsync(_writerJsObjectRef, "write", buffer);
-            }
-            catch (Exception ex)
-            {
-                var m = ex.Message;
-            }
-            
-         //   return Task.CompletedTask;
+            await (Task)_writerJsObject.Invoke("write", Uint8Array.From(buffer));
         }
 
         public override async ValueTask DisposeAsync()
         {
             await (Task)_writerJsObject.Invoke("close");
-            //_jsRuntime.DeleteJsObjectRef(_writerJsObjectRef.StreamSaverJsObjectRefId);
-            //_jsRuntime.DeleteJsObjectRef(_writableStreamJsObjectRef.StreamSaverJsObjectRefId);
-            //_jsRuntime.DeleteJsObjectRef(_streamSaverJsObjectRef.StreamSaverJsObjectRefId);
+            _writerJsObject.Dispose();
+            _writeableStreamJsObject.Dispose();
+            _streamSaverJsObject.Dispose();
             Close();
             await base.DisposeAsync();
         }
