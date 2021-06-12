@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>melihercan</Authors>
     <Description>JSInterop of StreamSaver (https://github.com/jimmywarting/StreamSaver.js) package for Blazor WASM. 
-With this package, you can download very large files without overflowing the memory as it writes incoming data chunks directly to the file instead of accumulating them in memory.</Description>
+With this package, you can download files by writing incoming data chunks directly to the file instead of accumulating them in memory. That will prevent memory overflows for very large files.</Description>
     <Copyright>melihercan2021</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>me.png</PackageIcon>
