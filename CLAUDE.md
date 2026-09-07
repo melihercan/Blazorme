@@ -107,8 +107,7 @@ Consequences of the migration, so they are not accidentally reintroduced:
   `StreamSaver/Resources/` folder it lived in. It was the .NET 5/6 preview WASM interop, removed in
   .NET 7.
 - No `RazorLangVersion`; it follows the SDK default.
-- `Nullable` is enabled in **all five libraries and the test project**. `DemoApp` does not have it
-  yet; turning it on there will surface warnings across the pages, so do it deliberately.
+- `Nullable` is enabled **everywhere**, including `DemoApp` and the test project.
 - Third-party packages are pinned at their pre-migration versions and work fine: `htmldiff.net`
   1.4.0, `Fizzler.Systems.HtmlAgilityPack` 1.2.1, `RichardSzalay.MockHttp` 6.0.0, `Markdig` 0.24.0.
   Framework packages are on 10.0.11, and on 8.0.x for TestHost's net8.0 assets.
@@ -157,6 +156,7 @@ FluentAssertions is pinned to **7.x** — 8.x requires payment for commercial us
 | `SplitCharacterizationTests` | Rendering, the split.js options object, cursor derivation, pane sizing. |
 | `StreamSaverTests` | Module import, writer creation, the write window, disposal. |
 | `TestHostCharacterizationTests` | That TestHost renders, and that its Fizzler selector layer works. |
+| `DemoAppTests` | The demo pages, driven through bUnit against a recording stream. |
 | `KnownDefectTests` | One test per known defect. |
 
 ### The defect-test convention
@@ -170,6 +170,13 @@ FluentAssertions is pinned to **7.x** — 8.x requires payment for commercial us
 
 A red test elsewhere means behaviour changed; acceptable only if intended, in which case update the
 test in the same commit.
+
+### Dispatch demo-page events with the async helpers
+
+`DemoAppTests` uses `ClickAsync` / `ChangeAsync` and awaits every one. The synchronous helpers
+return once the handler yields, and `StreamSaverDemo.AppendAsync` ends with `await Task.Delay(1)`,
+so a synchronous `Click` lets the next interaction race the tail of the previous one. Written that
+way the suite failed about one run in eight.
 
 ## Component conventions
 

@@ -69,6 +69,7 @@ release. The pin is deliberate — do not let a tool bump it.
 | `SplitCharacterizationTests` | Rendering, the options object handed to split.js, cursor derivation, pane sizing. |
 | `StreamSaverTests` | Module import, writer creation, the write window, disposal. |
 | `TestHostCharacterizationTests` | That TestHost renders and that its Fizzler selector layer works. |
+| `DemoAppTests` | The demo pages through bUnit, including a regression test for the Close/Reset NullReferenceException. |
 | `MultiTargetingTests` | That each of TestHost's shipped frameworks binds to its own Components major, and that both expose the same public surface. |
 | `KnownDefectTests` | One test per defect — see below. |
 

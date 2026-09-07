@@ -7,9 +7,9 @@ namespace DemoApp.Models
 {
     public class StreamSaverModel
     {
-        public string Filename { get; set; }
+        public string Filename { get; set; } = string.Empty;
         public bool FilenameDisabled { get; set; }
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
         public int NumLoremIpsum { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace DemoApp.Pages
     public partial class DiffDemo : ComponentBase
     {
         [Inject]
-        private IDiff _diffApi { get; set; }
+        private IDiff _diffApi { get; set; } = default!;
 
         public string Body1 { get; set; } = string.Empty;
         public string Preview1 => Markdown.ToHtml(Body1);
