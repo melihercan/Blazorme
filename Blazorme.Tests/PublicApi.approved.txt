@@ -1,7 +1,6 @@
 assembly Blazorme.Diff
   type Blazorme.Diff : class
     ctor .ctor()
-    method virtual System.Threading.Tasks.Task OnInitializedAsync()
     method virtual System.Threading.Tasks.Task OnParametersSetAsync()
     method virtual System.Void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
     property Blazorme.DiffOutputFormat OutputFormat { get; set; }
@@ -44,7 +43,6 @@ assembly Blazorme.Split
     ctor .ctor()
     method virtual System.Threading.Tasks.Task OnAfterRenderAsync(System.Boolean firstRender)
     method virtual System.Void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
-    method virtual System.Void OnInitialized()
     property Blazorme.SplitDirection Direction { get; set; }
     property Blazorme.SplitGutterAlign GutterAlign { get; set; }
     property Microsoft.AspNetCore.Components.RenderFragment ChildContent { get; set; }

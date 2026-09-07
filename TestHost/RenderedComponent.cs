@@ -12,7 +12,7 @@ namespace Blazorme
         private readonly TestRenderer _renderer;
         private readonly ContainerComponent _containerTestRootComponent;
         private int _testComponentId;
-        private TComponent _testComponentInstance;
+        private TComponent _testComponentInstance = default!;
 
         internal RenderedComponent(TestRenderer renderer)
         {
@@ -36,7 +36,8 @@ namespace Blazorme
             _testComponentInstance = (TComponent)foundTestComponent.Item2;
         }
 
-        public HtmlNode Find(string selector)
+        /// <summary>The first match, or <c>null</c> when the selector matches nothing.</summary>
+        public HtmlNode? Find(string selector)
         {
             return FindAll(selector).FirstOrDefault();
         }

@@ -8,42 +8,56 @@ using Xunit;
 namespace Blazorme.Tests;
 
 /// <summary>
-/// Tests that assert behaviour which is WRONG, one per outstanding defect.
+/// One test per defect, rewritten in place as each is fixed so the change shows up in the diff
+/// rather than as silence.
 ///
-/// These exist so that fixing a defect shows up as a rewritten test in the diff rather than as
-/// silence. When a defect is fixed, REWRITE its test to assert the corrected behaviour — never
-/// delete it.
+/// Phase 0 pinned seven defects here. Phase 4 fixed four; those now assert the corrected
+/// behaviour and are prefixed FIXED_, naming the pin they replace.
 ///
-/// Two of these are marked PERMANENT: they pin warts that cannot be fixed without breaking the
-/// public API, which is under an additive-only guarantee. Do not "fix" those.
+/// The rest are not going to be fixed, and say why:
+/// - LIMITATION_ — inherent to a dependency, not a bug in this code.
+/// - PERMANENT_  — fixing it would break the public API, which is under an additive-only
+///                 guarantee. Do not "fix" those.
 /// </summary>
 public class KnownDefectTests : BunitContext
 {
     public KnownDefectTests() => JSInterop.Mode = JSRuntimeMode.Loose;
 
+    private BlazormeSplit.Options SingleSplitCallOptions()
+        => (BlazormeSplit.Options)JSInterop.Invocations
+            .Single(i => i.Identifier == "Split").Arguments[1]!;
+
     [Fact]
-    public void DEFECT_Diff_fetches_its_html_twice_on_the_very_first_render()
+    public void FIXED_Diff_fetches_its_html_once_per_parameter_set()
     {
-        // Diff.razor.cs overrides BOTH OnInitializedAsync and OnParametersSetAsync with the same
-        // call. Blazor runs both on the first render, so every mount does the work twice — and
-        // for the Row/Column formats that is two round trips to JS instead of one.
+        // Was: DEFECT_Diff_fetches_its_html_twice_on_the_very_first_render, which asserted 2.
+        // Diff.razor.cs used to override BOTH OnInitializedAsync and OnParametersSetAsync with
+        // the same call, and Blazor runs both on the first render. The OnInitializedAsync
+        // override is gone; OnParametersSetAsync alone covers the first render and every later
+        // parameter change.
         var diff = Substitute.For<IDiff>();
         diff.GetHtmlAsync(default!, default!, default!, default!, default, default)
             .ReturnsForAnyArgs(Task.FromResult("<p>diff</p>"));
         Services.AddSingleton(diff);
 
-        Render<Diff>(p => p.Add(c => c.FirstInput, "a").Add(c => c.SecondInput, "b"));
+        var cut = Render<Diff>(p => p.Add(c => c.FirstInput, "a").Add(c => c.SecondInput, "b"));
+
+        diff.ReceivedWithAnyArgs(1).GetHtmlAsync(default!, default!, default!, default!, default, default);
+
+        // Still refreshes when the inputs actually change.
+        cut.Render(p => p.Add(c => c.SecondInput, "c"));
 
         diff.ReceivedWithAnyArgs(2).GetHtmlAsync(default!, default!, default!, default!, default, default);
     }
 
     [Fact]
-    public void DEFECT_Split_writes_to_its_own_parameter_and_then_goes_stale()
+    public void FIXED_Split_leaves_its_Cursor_parameter_alone()
     {
-        // Split.OnInitialized assigns to [Parameter] Cursor when the caller left it empty.
-        // OnInitialized runs once, so changing Direction later leaves the cursor describing
-        // the OLD direction. Writing to one's own parameter is unsupported in Blazor precisely
-        // because the framework owns those properties.
+        // Was: DEFECT_Split_writes_to_its_own_parameter_and_then_goes_stale.
+        // Split.OnInitialized used to assign to [Parameter] Cursor when the caller left it empty.
+        // OnInitialized runs once, so changing Direction afterwards left the cursor describing
+        // the OLD direction. The cursor is now derived at the point of use, and the parameter is
+        // never written — Blazor owns parameter properties.
         var cut = Render<Split>(p =>
         {
             p.Add(c => c.Direction, SplitDirection.Vertical);
@@ -51,21 +65,38 @@ public class KnownDefectTests : BunitContext
             p.AddChildContent<SplitPane>(pane => pane.AddChildContent("<p>b</p>"));
         });
 
-        cut.Instance.Cursor.Should().Be("row-resize");
+        cut.Instance.Cursor.Should().BeEmpty("the component must not write to its own parameter");
 
         cut.Render(p => p.Add(c => c.Direction, SplitDirection.Horizontal));
 
-        cut.Instance.Cursor.Should().Be("row-resize",
-            "the cursor is stale — it should have become col-resize");
+        cut.Instance.Cursor.Should().BeEmpty();
+
+        // The derived value still reaches JS. Both directions are covered by
+        // SplitCharacterizationTests.Derives_a_cursor_from_the_direction_when_none_is_given.
+        SingleSplitCallOptions().Cursor.Should().Be("row-resize");
     }
 
     [Fact]
-    public void DEFECT_Split_lowercases_enum_names_with_the_current_culture()
+    public void An_explicit_Cursor_still_wins_over_the_derived_one()
     {
-        // Direction.ToString().ToLower() and GutterAlign.ToString().ToLower() are culture
-        // sensitive. This is LATENT, not live: no member of SplitDirection or SplitGutterAlign
-        // currently contains a capital 'I', which is the letter Turkish maps to 'ı'. Adding one
-        // (SplitGutterAlign.Inside, say) would silently emit an option Split.js cannot match.
+        Render<Split>(p =>
+        {
+            p.Add(c => c.Cursor, "grabbing");
+            p.AddChildContent<SplitPane>(pane => pane.AddChildContent("<p>a</p>"));
+            p.AddChildContent<SplitPane>(pane => pane.AddChildContent("<p>b</p>"));
+        });
+
+        SingleSplitCallOptions().Cursor.Should().Be("grabbing");
+    }
+
+    [Fact]
+    public void FIXED_Split_lowercases_enum_names_invariantly()
+    {
+        // Was: DEFECT_Split_lowercases_enum_names_with_the_current_culture.
+        // ToLower() is culture sensitive, and Turkish maps 'I' to 'ı'. The defect was LATENT —
+        // no member of SplitDirection or SplitGutterAlign contains a capital 'I' — but adding
+        // one (SplitGutterAlign.Inside, say) would have emitted an option Split.js cannot match.
+        // Both call sites now use ToLowerInvariant.
         var original = CultureInfo.CurrentCulture;
         try
         {
@@ -81,10 +112,11 @@ public class KnownDefectTests : BunitContext
             var options = (BlazormeSplit.Options)JSInterop.Invocations
                 .Single(i => i.Identifier == "Split").Arguments[1]!;
 
-            options.Direction.Should().Be("horizontal", "no current member contains a capital I");
+            options.Direction.Should().Be("horizontal");
 
-            // The hazard itself, demonstrated on the letter that would trigger it:
+            // The hazard that is now defused, shown on the letter that would have triggered it:
             "Inside".ToLower().Should().NotBe("inside", "tr-TR maps 'I' to 'ı', not 'i'");
+            "Inside".ToLowerInvariant().Should().Be("inside", "which is why the code uses this");
         }
         finally
         {
@@ -93,23 +125,24 @@ public class KnownDefectTests : BunitContext
     }
 
     [Fact]
-    public void DEFECT_SplitPane_outside_a_Split_throws_a_bare_Exception()
+    public void FIXED_SplitPane_outside_a_Split_throws_InvalidOperationException()
     {
-        // A bare Exception cannot be caught selectively by callers.
-        // InvalidOperationException is the right type here.
+        // Was: DEFECT_SplitPane_outside_a_Split_throws_a_bare_Exception. A bare Exception cannot
+        // be caught selectively. Narrowing the thrown type to a subclass is not a breaking
+        // change: existing catch(Exception) handlers still match it.
         var act = () => Render<SplitPane>(p => p.AddChildContent("<p>orphan</p>"));
 
-        act.Should().Throw<Exception>()
-            .Which.Should().Match<Exception>(
-                e => e.GetType() == typeof(Exception)
-                     && e.Message == "SplitPane should be a child of Split");
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("SplitPane should be a child of Split");
     }
 
     [Fact]
-    public async Task DEFECT_Inline_output_silently_ignores_both_titles_and_style()
+    public async Task LIMITATION_Inline_output_ignores_both_titles_and_style()
     {
-        // GetHtmlAsync's Inline branch hands off to HtmlDiff, which takes neither the file
-        // titles nor a word/char granularity. The parameters are accepted and discarded.
+        // NOT a defect in this code, and not scheduled for a fix: GetHtmlAsync's Inline branch
+        // hands off to htmldiff.net, which has no concept of file titles or word/char
+        // granularity. The parameters are accepted and discarded. Rejecting them instead would
+        // break callers who pass them harmlessly today.
         var js = Substitute.For<Microsoft.JSInterop.IJSRuntime>();
         var api = new DiffApi(js);
 

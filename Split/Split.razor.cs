@@ -14,7 +14,7 @@ namespace Blazorme
     public partial class Split
     {
         [Inject]
-        private IJSRuntime _jsRuntime { get; set; }
+        private IJSRuntime _jsRuntime { get; set; } = default!;
 
         [Parameter]
         public int DefaultMinSize { get; set; } = 100;
@@ -45,7 +45,7 @@ namespace Blazorme
         public string Cursor { get; set; } = string.Empty;
 
         [Parameter]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         private List<SplitPane> _splitPanes = new List<SplitPane>();
 
@@ -55,21 +55,13 @@ namespace Blazorme
             _splitPanes.Add(splitPane);
         }
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-            if (string.IsNullOrEmpty(Cursor))
-            {
-                if(Direction == SplitDirection.Horizontal)
-                {
-                    Cursor = "col-resize";
-                }
-                else
-                {
-                    Cursor = "row-resize";
-                }
-            }
-        }
+        // Resolved on every use rather than assigned to the Cursor parameter in OnInitialized.
+        // Blazor owns parameter properties, and OnInitialized runs once, so the old code left the
+        // cursor describing whatever Direction happened to be at mount time.
+        private string EffectiveCursor =>
+            string.IsNullOrEmpty(Cursor)
+                ? (Direction == SplitDirection.Horizontal ? "col-resize" : "row-resize")
+                : Cursor;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -86,11 +78,11 @@ namespace Blazorme
                         MinSize = _splitPanes.Select(splitPane => splitPane.MinSize ?? DefaultMinSize).ToArray(),
                         ExpandToMin = ExpandToMin,
                         GutterSize = GutterSize,
-                        GutterAlign = GutterAlign.ToString().ToLower(),
+                        GutterAlign = GutterAlign.ToString().ToLowerInvariant(),
                         SnapOffset = SnapOffset,
                         DragInterval = DragInterval,
-                        Direction = Direction.ToString().ToLower(),
-                        Cursor = Cursor
+                        Direction = Direction.ToString().ToLowerInvariant(),
+                        Cursor = EffectiveCursor
                     });
             }
         }

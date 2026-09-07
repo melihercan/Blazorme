@@ -11,9 +11,9 @@ namespace BlazormeTestHost
     [SuppressMessage("Usage", "BL0006:Do not use RenderTree types", Justification = "<Pending>")]
     internal class TestRenderer : Renderer
     {
-        private Exception _unhandledException;
+        private Exception? _unhandledException;
 
-        private TaskCompletionSource<object> _nextRenderTcs = new TaskCompletionSource<object>();
+        private TaskCompletionSource<object?> _nextRenderTcs = new TaskCompletionSource<object?>();
 
         public TestRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
             : base(serviceProvider, loggerFactory)
@@ -47,7 +47,7 @@ namespace BlazormeTestHost
         {
             // TODO: Capture batches (and the state of component output) for individual inspection
             var prevTcs = _nextRenderTcs;
-            _nextRenderTcs = new TaskCompletionSource<object>();
+            _nextRenderTcs = new TaskCompletionSource<object?>();
             prevTcs.SetResult(null);
             return Task.CompletedTask;
         }

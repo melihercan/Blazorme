@@ -8,7 +8,7 @@ namespace Blazorme
         private string _diff { get; set; } = string.Empty;
 
         [Inject]
-        private IDiff _diffApi { get; set; }
+        private IDiff _diffApi { get; set; } = default!;
 
         [Parameter]
         public string FirstInput { get; set; } = string.Empty;
@@ -28,13 +28,9 @@ namespace Blazorme
         [Parameter]
         public DiffStyle Style { get; set; } = DiffStyle.Word;
 
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
-
-            _diff = await _diffApi.GetHtmlAsync(FirstInput, SecondInput, FirstTitle, SecondTitle, OutputFormat, Style);
-        }
-
+        // Only OnParametersSetAsync fetches. Blazor sets parameters before OnInitializedAsync and
+        // runs OnParametersSetAsync immediately after it, so overriding both meant every mount did
+        // the work twice — two JS round trips for the Row and Column formats.
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();

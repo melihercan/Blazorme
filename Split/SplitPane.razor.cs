@@ -8,7 +8,7 @@ namespace Blazorme
     public partial class SplitPane
     {
         [CascadingParameter]
-        private Split _split { get; set; }
+        private Split? _split { get; set; }
 
         [Parameter]
         public int SizeInPercentage { get; set; }
@@ -17,7 +17,7 @@ namespace Blazorme
         public int? MinSize { get; set; }
 
         [Parameter]
-        public RenderFragment ChildContent { get; set; }
+        public RenderFragment? ChildContent { get; set; }
 
         public ElementReference ElementReference;
 
@@ -27,7 +27,9 @@ namespace Blazorme
 
             if(_split == null)
             {
-                throw new Exception("SplitPane should be a child of Split");
+                // InvalidOperationException rather than a bare Exception, so callers can catch
+                // this selectively.
+                throw new InvalidOperationException("SplitPane should be a child of Split");
             }
             _split.AddSplitPane(this);
         }

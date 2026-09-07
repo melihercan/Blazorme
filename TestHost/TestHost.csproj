@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <RootNamespace>BlazormeTestHost</RootNamespace>
     <Description>Steve  Sanderson's TestHost implementation as NuGet package from his BlazorUnitTestingPrototype project source code. This library provides helpers for unit testing of Blazor components. Additionally .NET5 support has been provided. NuGet now supports both .NetStandard2.1 and .NET5. See the following links for more details:
 https://blog.stevensanderson.com/2019/08/29/blazor-unit-testing-prototype/

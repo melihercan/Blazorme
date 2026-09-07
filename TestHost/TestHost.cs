@@ -40,6 +40,11 @@ namespace Blazorme
                 throw new InvalidOperationException("Cannot configure services after the host has started operation");
             }
 
+            if (implementation is null)
+            {
+                throw new ArgumentNullException(nameof(implementation));
+            }
+
             _serviceCollection.AddSingleton(typeof(TContract), implementation);
         }
 
@@ -71,7 +76,7 @@ namespace Blazorme
 
         public RenderedComponent<TComponent> AddComponent<TComponent>(IDictionary<string, object> parameters) where TComponent : IComponent
         {
-            return AddComponent<TComponent>(ParameterView.FromDictionary(parameters));
+            return AddComponent<TComponent>(ParameterView.FromDictionary(parameters!));
         }
 
         private TestRenderer Renderer => _renderer.Value;

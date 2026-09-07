@@ -83,9 +83,12 @@ public class TestHostCharacterizationTests
 
         var rendered = host.AddComponent<Diff>();
 
-        rendered.Find("p.hit").Should().NotBeNull();
-        rendered.Find("p.hit").InnerText.Should().Be("found me");
+        // Find returns HtmlNode? since Phase 4: it is FirstOrDefault under the hood.
+        var hit = rendered.Find("p.hit");
+        hit.Should().NotBeNull();
+        hit!.InnerText.Should().Be("found me");
         rendered.FindAll("p").Should().HaveCount(1);
+        rendered.Find("p.no-such-class").Should().BeNull();
     }
 
     [Fact]

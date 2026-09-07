@@ -33,38 +33,31 @@ namespace BlazormeStreamSaver
 
         public override bool CanWrite => true;
 
-        public override long Length => 0;
+        public override long Length => throw new NotSupportedException();
 
         public override long Position
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
         }
 
+        /// <summary>No-op: every chunk is handed to the browser as it arrives.</summary>
         public override void Flush()
         {
-            throw new NotImplementedException();
         }
 
         public override int Read(byte[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotSupportedException();
 
         public override long Seek(long offset, SeekOrigin origin)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotSupportedException();
 
         public override void SetLength(long value)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotSupportedException();
 
+        /// <summary>Not supported: the underlying JS writer is asynchronous.</summary>
         public override void Write(byte[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotSupportedException();
 
         public override async Task WriteAsync(byte[] buffer, int offset, int count,
             CancellationToken cancellationToken)
