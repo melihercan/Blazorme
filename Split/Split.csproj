@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
-    <RazorLangVersion>3.0</RazorLangVersion>
+    <TargetFramework>net10.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>melihercan</Authors>
     <Company>melihercan</Company>
@@ -22,17 +21,10 @@ It provides resizeable split views (panes).</Description>
     <Version>1.0.1</Version>
   </PropertyGroup>
 
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.15" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.15" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="10.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.11" />
   </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net5')) ">
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.6" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <None Include="..\doc\me.png">

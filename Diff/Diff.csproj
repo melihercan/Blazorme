@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
-    <RazorLangVersion>3.0</RazorLangVersion>
+    <TargetFramework>net10.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Blazorme.Diff</PackageId>
     <Authors>melihercan</Authors>
@@ -32,17 +31,10 @@ It can also be used as a library to get diff or html diff output strings from co
     </None>
   </ItemGroup>
 
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+  <ItemGroup>
     <PackageReference Include="htmldiff.net" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.15" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.15" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net5')) ">
-    <PackageReference Include="htmldiff.net" Version="1.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="10.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.11" />
   </ItemGroup>
 
 </Project>

@@ -7,15 +7,20 @@ using Xunit;
 namespace Blazorme.Tests;
 
 /// <summary>
-/// Characterization tests for Blazorme.TestHost.
+/// Characterization and regression tests for Blazorme.TestHost.
 ///
-/// The headline fact: TestHost DOES NOT WORK on .NET 10 today. It is Steve Sanderson's
-/// BlazorUnitTestingPrototype, and it reads <c>RenderTreeFrame</c> members that were public
-/// fields in ASP.NET Core 3.1 and became properties in .NET 5+. The 3.1-compiled IL does
-/// <c>ldfld</c>, so the runtime throws <see cref="MissingFieldException"/>.
+/// Phase 0 pinned this library as BROKEN on .NET 10: it is Steve Sanderson's
+/// BlazorUnitTestingPrototype, and its shipped IL read <c>RenderTreeFrame</c> members that were
+/// public fields in ASP.NET Core 3.1 and became properties in .NET 5+, so the runtime threw
+/// <see cref="MissingFieldException"/>.
 ///
-/// These pin that broken state so the Phase 3 migration is visible in the diff. When TestHost
-/// is migrated, REWRITE these tests rather than deleting them.
+/// Phase 1 fixed it with no source change at all. The C# in this library was always written as
+/// <c>frame.FrameType</c>, which binds to a property exactly as well as to a field — the break
+/// was purely in the stale compiled reference. Retargeting to net10.0 and deduplicating the
+/// PackageReference items recompiled it against Components 10.0, and the library works.
+///
+/// The two tests below were DEFECT pins in Phase 0 and are rewritten here rather than deleted,
+/// so the fix is visible in the diff.
 /// </summary>
 public class TestHostCharacterizationTests
 {
@@ -47,34 +52,63 @@ public class TestHostCharacterizationTests
     }
 
     [Fact]
-    public void DEFECT_AddComponent_throws_because_RenderTreeFrame_changed_shape_after_3_1()
+    public void FIXED_AddComponent_renders_a_component_and_exposes_its_markup()
     {
+        // Was: DEFECT_AddComponent_throws_because_RenderTreeFrame_changed_shape_after_3_1,
+        // which asserted MissingFieldException. Fixed in Phase 1 by the retarget.
+        var diff = Substitute.For<IDiff>();
+        diff.GetHtmlAsync(default!, default!, default!, default!, default, default)
+            .ReturnsForAnyArgs(Task.FromResult("<ins>added</ins>"));
+
         var host = new TestHost();
-        host.AddService<IDiff, IDiff>(Substitute.For<IDiff>());
+        host.AddService<IDiff, IDiff>(diff);
 
-        var act = () => host.AddComponent<Diff>();
+        var rendered = host.AddComponent<Diff>();
 
-        act.Should().Throw<MissingFieldException>()
-            .WithMessage("*Microsoft.AspNetCore.Components.RenderTree.RenderTreeFrame*");
+        rendered.Instance.Should().NotBeNull();
+        rendered.GetMarkup().Should().Contain("<ins>added</ins>");
     }
 
     [Fact]
-    public void DEFECT_the_net5_build_was_actually_compiled_against_Components_3_1()
+    public void FIXED_the_Fizzler_selector_layer_works_over_the_rendered_markup()
     {
-        // TestHost.csproj declares Microsoft.AspNetCore.Components 3.1.10 unconditionally AND
-        // 5.0.0 for net5.0. Duplicate PackageReference items do not merge — the first wins and
-        // the conditional one is silently discarded (NU1504). So the package's advertised
-        // ".NET5 support" ships IL bound to 3.1, which is the direct cause of the test above.
+        // GetMarkup/FindAll go through Htmlizer and HtmlAgilityPack, which is the part that
+        // walked RenderTreeFrame most heavily. Exercising a selector proves the whole path.
+        var diff = Substitute.For<IDiff>();
+        diff.GetHtmlAsync(default!, default!, default!, default!, default, default)
+            .ReturnsForAnyArgs(Task.FromResult("<p class=\"hit\">found me</p>"));
+
+        var host = new TestHost();
+        host.AddService<IDiff, IDiff>(diff);
+
+        var rendered = host.AddComponent<Diff>();
+
+        rendered.Find("p.hit").Should().NotBeNull();
+        rendered.Find("p.hit").InnerText.Should().Be("found me");
+        rendered.FindAll("p").Should().HaveCount(1);
+    }
+
+    [Fact]
+    public void FIXED_the_build_binds_to_the_net10_Components_assembly()
+    {
+        // Was: DEFECT_the_net5_build_was_actually_compiled_against_Components_3_1.
+        // TestHost.csproj used to declare Microsoft.AspNetCore.Components 3.1.10 unconditionally
+        // AND 5.0.0 for net5.0. Duplicate PackageReference items do not merge — the first won and
+        // the conditional one was silently discarded (NU1504), so the package's advertised
+        // ".NET5 support" shipped IL bound to 3.1. Phase 1 removed the duplicate.
         var componentsReference = typeof(TestHost).Assembly
             .GetReferencedAssemblies()
             .Single(a => a.Name == "Microsoft.AspNetCore.Components");
 
-        componentsReference.Version.Should().Be(new Version(3, 1, 10, 0));
+        componentsReference.Version.Should().NotBeNull();
+        componentsReference.Version!.Major.Should().Be(10);
     }
 
     [Fact]
-    public void Evidence_RenderTreeFrame_members_are_properties_on_this_runtime()
+    public void RenderTreeFrame_members_are_properties_on_this_runtime()
     {
+        // Kept from Phase 0: this is the shape change that broke the old binary, and the reason
+        // the fix had to be a recompile rather than a source edit.
         var frameType = typeof(Microsoft.AspNetCore.Components.RenderTree.RenderTreeFrame);
 
         frameType.GetField("FrameType", BindingFlags.Public | BindingFlags.Instance)

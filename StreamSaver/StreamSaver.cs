@@ -1,69 +1,42 @@
-﻿using BlazormeStreamSaver;
+using BlazormeStreamSaver;
 using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Blazorme
 {
+    /// <summary>
+    /// Creates streams that write directly to a file the browser is downloading, via
+    /// StreamSaver.js, so very large files never have to be held in memory.
+    /// </summary>
     public class StreamSaver : IStreamSaver, IAsyncDisposable
     {
-        //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
-        ///  JSISOLATION ONLY WORKS WITH MODULES THAT EXPORT FUNCTIONS. 
-        ////private readonly Lazy<Task<IJSObjectReference>> _streamSaverModuleTask;
-        ////private readonly Lazy<Task<IJSObjectReference>> _polyfillModuleTask;
-        ////private readonly Lazy<Task<IJSObjectReference>> _jsInteropModuleTask;
-
-
-        private readonly IJSRuntime _jsRuntime;
+        // JS isolation needs an ES module, which is why StreamSaverJsInterop.js exists: it wraps
+        // the classic StreamSaver.min.js global. The host page still loads StreamSaver.min.js and
+        // polyfill.min.js with <script> tags — those are not modules and cannot be imported.
+        private readonly Lazy<Task<IJSObjectReference>> _jsInteropModuleTask;
 
         public StreamSaver(IJSRuntime jsRuntime)
         {
-            //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
-            //_streamSaverModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            //   "import", "./_content/Blazorme.StreamSaver/StreamSaver.min.js").AsTask());
-            //_polyfillModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            //   "import", "./_content/Blazorme.StreamSaver/polyfill.min.js").AsTask());
-            //_jsInteropModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            //   "import", "./_content/Blazorme.StreamSaver/StreamSaverJsInterop.js").AsTask());
-
-            _jsRuntime = jsRuntime;
+            _jsInteropModuleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./_content/Blazorme.StreamSaver/StreamSaverJsInterop.js").AsTask());
         }
 
         public async Task<Stream> CreateWritableFileStreamAsync(string fileName)
         {
-            //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
-            //return new WritableFileStream(
-            //    await _streamSaverModuleTask.Value,
-            //    await _jsInteropModuleTask.Value,
-            //    fileName);
-            var writeableFileStream = new WritableFileStream(_jsRuntime, fileName);
-            await writeableFileStream.CreateAsync();
-            return writeableFileStream;
+            var module = await _jsInteropModuleTask.Value;
+            var writer = await module.InvokeAsync<IJSObjectReference>("createWriter", fileName);
+            return new WritableFileStream(module, writer);
         }
 
-        public ValueTask DisposeAsync() 
+        public async ValueTask DisposeAsync()
         {
-            //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
-            //if (_streamSaverModuleTask.IsValueCreated)
-            //{
-            //    var streamSaverModule = await _streamSaverModuleTask.Value;
-            //    await streamSaverModule.DisposeAsync();
-            //}
-            //if (_streamSaverModuleTask.IsValueCreated)
-            //{
-            //    var polyfillModule = await _polyfillModuleTask.Value;
-            //    await polyfillModule.DisposeAsync();
-            //}
-            //if (_jsInteropModuleTask.IsValueCreated)
-            //{
-            //    var jsInteropModule = await _jsInteropModuleTask.Value;
-            //    await jsInteropModule.DisposeAsync();
-            //}
-            return ValueTask.CompletedTask;
+            if (_jsInteropModuleTask.IsValueCreated)
+            {
+                var module = await _jsInteropModuleTask.Value;
+                await module.DisposeAsync();
+            }
         }
     }
 }

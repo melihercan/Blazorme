@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Diff\Diff.csproj" />
     <ProjectReference Include="..\Split\Split.csproj" />
+    <ProjectReference Include="..\StreamSaver\StreamSaver.csproj" />
     <ProjectReference Include="..\TestHost\TestHost.csproj" />
   </ItemGroup>
 

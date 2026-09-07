@@ -1,49 +1,30 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices.JavaScript;
 
 namespace BlazormeStreamSaver
 {
+    /// <summary>
+    /// A write-only <see cref="Stream"/> that forwards each chunk straight to a StreamSaver.js
+    /// writer, so a large download never has to be accumulated in memory.
+    /// </summary>
+    /// <remarks>
+    /// Originally built on <c>System.Private.Runtime.InteropServices.JavaScript</c> — the .NET 5/6
+    /// preview WASM interop, removed in .NET 7. It now uses ordinary Blazor JS interop against the
+    /// <c>StreamSaverJsInterop.js</c> module, which also means it is no longer WASM-only.
+    /// </remarks>
     internal class WritableFileStream : Stream
     {
-        //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
-        //private readonly IJSObjectReference _streamSaverModule;
-        //private readonly IJSObjectReference _jsInteropModule;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly string _fileName;
+        private readonly IJSObjectReference _module;
+        private readonly IJSObjectReference _writer;
+        private bool _disposed;
 
-        private JSObject _streamSaverJsObject;
-        private JSObject _writeableStreamJsObject;
-        private JSObject _writerJsObject;
-
-        public WritableFileStream(IJSRuntime jsRuntime, string fileName)
+        internal WritableFileStream(IJSObjectReference module, IJSObjectReference writer)
         {
-            _jsRuntime = jsRuntime;
-            _fileName = fileName;
-        }
-
-        //// TODO: INCLUDE IF YOU CAN CONVERT JS FILES TO MODULE
-        //public WritableFileStream(IJSObjectReference streamSaverModule, IJSObjectReference jsInteropModule, 
-        //    string fileName)
-        //{
-        //    _streamSaverModule = streamSaverModule;
-        //    _jsInteropModule = jsInteropModule;
-        //    _fileName = fileName;
-        //}
-
-        public Task CreateAsync()
-        {
-            var windowJsObject = (JSObject)Runtime.GetGlobalObject("window");
-            _streamSaverJsObject = (JSObject)windowJsObject.GetObjectProperty("streamSaver");
-            _writeableStreamJsObject =  (JSObject)_streamSaverJsObject.Invoke("createWriteStream", _fileName);
-            _writerJsObject = (JSObject)_writeableStreamJsObject.Invoke("getWriter");
-            return Task.CompletedTask;
+            _module = module;
+            _writer = writer;
         }
 
         public override bool CanRead => false;
@@ -54,10 +35,10 @@ namespace BlazormeStreamSaver
 
         public override long Length => 0;
 
-        public override long Position 
-        { 
-            get => throw new NotImplementedException(); 
-            set => throw new NotImplementedException(); 
+        public override long Position
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
         public override void Flush()
@@ -85,17 +66,32 @@ namespace BlazormeStreamSaver
             throw new NotImplementedException();
         }
 
-        public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        public override async Task WriteAsync(byte[] buffer, int offset, int count,
+            CancellationToken cancellationToken)
         {
-            await (Task)_writerJsObject.Invoke("write", Uint8Array.From(buffer));
+            ValidateBufferArguments(buffer, offset, count);
+
+            // Send exactly the requested window, not the whole array. Stream.WriteAsync(
+            // ReadOnlyMemory<byte>) hands us a POOLED buffer that is usually larger than the data,
+            // so writing buffer.Length here appended trailing garbage to every download.
+            var chunk = new byte[count];
+            Buffer.BlockCopy(buffer, offset, chunk, 0, count);
+
+            await _module.InvokeVoidAsync("write", cancellationToken, _writer, chunk);
         }
 
         public override async ValueTask DisposeAsync()
         {
-            await (Task)_writerJsObject.Invoke("close");
-            _writerJsObject.Dispose();
-            _writeableStreamJsObject.Dispose();
-            _streamSaverJsObject.Dispose();
+            if (!_disposed)
+            {
+                _disposed = true;
+
+                // Closing the writer is what finalises the download; skipping it leaves the
+                // browser's save dialog hanging.
+                await _module.InvokeVoidAsync("close", _writer);
+                await _writer.DisposeAsync();
+            }
+
             Close();
             await base.DisposeAsync();
         }
