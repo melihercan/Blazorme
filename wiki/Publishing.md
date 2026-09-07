@@ -107,3 +107,7 @@ Four things the site needs that are easy to lose, all of which the script verifi
 
 `404.html` sets `segmentCount = 0` because the demo is served from the root of a user site. A
 project site under `/repo-name/` would need `1`, and a matching `<base href>`.
+
+Expect a `404` in the browser console on any deep link. That is the mechanism, not a fault:
+GitHub Pages genuinely returns HTTP 404 for `/streamsaverdemo`, with `404.html` as the body, and
+the redirect happens from there. A normal load of the site root logs nothing.
