@@ -140,3 +140,7 @@ Write-Host 'To publish:' -ForegroundColor Cyan
 Write-Host "  git -C `"$SitePath`" add -A"
 Write-Host "  git -C `"$SitePath`" commit -m `"Update demo`""
 Write-Host "  git -C `"$SitePath`" push"
+Write-Host ''
+Write-Host 'Then HARD REFRESH (Ctrl+Shift+R) before believing what you see.' -ForegroundColor Yellow
+Write-Host 'index.html is cached for ten minutes, and a stale one loading new assets hangs on' -ForegroundColor Yellow
+Write-Host '"Loading..." exactly like a broken deploy. Incognito settles it either way.' -ForegroundColor Yellow

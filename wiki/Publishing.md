@@ -111,3 +111,18 @@ project site under `/repo-name/` would need `1`, and a matching `<base href>`.
 Expect a `404` in the browser console on any deep link. That is the mechanism, not a fault:
 GitHub Pages genuinely returns HTTP 404 for `/streamsaverdemo`, with `404.html` as the body, and
 the redirect happens from there. A normal load of the site root logs nothing.
+
+### After deploying, hard refresh before believing anything
+
+`index.html` is served with `Cache-Control: max-age=600`, so your own browser may keep the previous
+one for up to ten minutes while loading the new assets around it. That combination hangs on
+*"Loading..."* and looks exactly like a broken deployment.
+
+Reach for **Ctrl+Shift+R**, or an incognito window, before debugging. If it still hangs there, it is
+real.
+
+This was at its worst going from the 2020 Blazor 3.x build to .NET 10, because the whole
+`_framework` layout changed and a cached `index.html` was asking for a runtime that no longer
+existed. Later deployments are safer: .NET 10 fingerprints asset file names
+(`dotnet.native.nxw7lo0lh5.wasm`), so a stale `index.html` is about the only thing cache can still
+get wrong.
