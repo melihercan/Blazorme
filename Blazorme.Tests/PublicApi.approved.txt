@@ -1,0 +1,137 @@
+assembly Blazorme.Diff
+  type Blazorme.Diff : class
+    ctor .ctor()
+    method virtual System.Threading.Tasks.Task OnInitializedAsync()
+    method virtual System.Threading.Tasks.Task OnParametersSetAsync()
+    method virtual System.Void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
+    property Blazorme.DiffOutputFormat OutputFormat { get; set; }
+    property Blazorme.DiffStyle Style { get; set; }
+    property System.String FirstInput { get; set; }
+    property System.String FirstTitle { get; set; }
+    property System.String SecondInput { get; set; }
+    property System.String SecondTitle { get; set; }
+  type Blazorme.DiffApi : class
+    ctor .ctor(Microsoft.JSInterop.IJSRuntime jsRuntime)
+    method System.Threading.Tasks.Task<System.String> GetAsync(System.String firstInput, System.String secondInput, System.String firstTitle, System.String secondTitle)
+    method System.Threading.Tasks.Task<System.String> GetHtmlAsync(System.String firstInput, System.String secondInput, System.String firstTitle, System.String secondTitle, Blazorme.DiffOutputFormat outputFormat, Blazorme.DiffStyle style)
+  type Blazorme.DiffInputTitle : static class
+    const System.String First = "First"
+    const System.String Second = "Second"
+  type Blazorme.DiffOutputFormat : enum System.Int32
+    Inline = 0
+    Row = 1
+    Column = 2
+  type Blazorme.DiffStyle : enum System.Int32
+    Word = 0
+    Char = 1
+  type Blazorme.IDiff : interface
+    method System.Threading.Tasks.Task<System.String> GetAsync(System.String firstInput, System.String secondInput, System.String firstTitle = "First", System.String secondTitle = "Second")
+    method System.Threading.Tasks.Task<System.String> GetHtmlAsync(System.String firstInput, System.String secondInput, System.String firstTitle = "First", System.String secondTitle = "Second", Blazorme.DiffOutputFormat outputFormat = 0, Blazorme.DiffStyle style = 0)
+  type Blazorme.ServiceCollectionExtension : static class
+    method static Microsoft.Extensions.DependencyInjection.IServiceCollection AddDiff(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+  type BlazormeDiff.HtmlConfiguration : class
+    ctor .ctor()
+    property System.Boolean DrawFileList { get; set; }
+    property System.String DiffStyle { get; set; }
+    property System.String Matching { get; set; }
+    property System.String OutputFormat { get; set; }
+  type BlazormeDiff._Imports : class
+    ctor .ctor()
+    method System.Void Execute()
+
+assembly Blazorme.Split
+  type Blazorme.Split : class
+    ctor .ctor()
+    method virtual System.Threading.Tasks.Task OnAfterRenderAsync(System.Boolean firstRender)
+    method virtual System.Void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
+    method virtual System.Void OnInitialized()
+    property Blazorme.SplitDirection Direction { get; set; }
+    property Blazorme.SplitGutterAlign GutterAlign { get; set; }
+    property Microsoft.AspNetCore.Components.RenderFragment ChildContent { get; set; }
+    property System.Boolean ExpandToMin { get; set; }
+    property System.Int32 DefaultMinSize { get; set; }
+    property System.Int32 DragInterval { get; set; }
+    property System.Int32 GutterSize { get; set; }
+    property System.Int32 SnapOffset { get; set; }
+    property System.String Cursor { get; set; }
+    property System.String GutterColor { get; set; }
+  type Blazorme.SplitDirection : enum System.Int32
+    Horizontal = 0
+    Vertical = 1
+  type Blazorme.SplitGutterAlign : enum System.Int32
+    Center = 0
+    Start = 1
+    End = 2
+  type Blazorme.SplitPane : class
+    ctor .ctor()
+    field Microsoft.AspNetCore.Components.ElementReference ElementReference
+    method virtual System.Void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)
+    method virtual System.Void OnInitialized()
+    property Microsoft.AspNetCore.Components.RenderFragment ChildContent { get; set; }
+    property System.Int32 SizeInPercentage { get; set; }
+    property System.Nullable<System.Int32> MinSize { get; set; }
+  type BlazormeSplit.Options : class
+    ctor .ctor()
+    property System.Boolean ExpandToMin { get; set; }
+    property System.Int32 DragInterval { get; set; }
+    property System.Int32 GutterSize { get; set; }
+    property System.Int32 SnapOffset { get; set; }
+    property System.Int32[] MinSize { get; set; }
+    property System.Int32[] Sizes { get; set; }
+    property System.String Cursor { get; set; }
+    property System.String Direction { get; set; }
+    property System.String GutterAlign { get; set; }
+  type BlazormeSplit._Imports : class
+    ctor .ctor()
+    method System.Void Execute()
+
+assembly Blazorme.StreamSaver
+  type Blazorme.IStreamSaver : interface
+    method System.Threading.Tasks.Task<System.IO.Stream> CreateWritableFileStreamAsync(System.String fileName)
+  type Blazorme.StreamSaver : class
+    ctor .ctor(Microsoft.JSInterop.IJSRuntime jsRuntime)
+    method System.Threading.Tasks.Task<System.IO.Stream> CreateWritableFileStreamAsync(System.String fileName)
+    method System.Threading.Tasks.ValueTask DisposeAsync()
+  type Blazorme.StreamSaverServiceExtensions : static class
+    method static Microsoft.Extensions.DependencyInjection.IServiceCollection AddStreamSaver(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+  type BlazormeStreamSaver._Imports : class
+    ctor .ctor()
+    method System.Void Execute()
+
+assembly Blazorme.TestHost
+  type Blazorme.EventDispatchExtensions : static class
+    method static System.Threading.Tasks.Task ChangeAsync(HtmlAgilityPack.HtmlNode element, System.Boolean newValue)
+    method static System.Threading.Tasks.Task ChangeAsync(HtmlAgilityPack.HtmlNode element, System.String newValue)
+    method static System.Threading.Tasks.Task ClickAsync(HtmlAgilityPack.HtmlNode element)
+    method static System.Threading.Tasks.Task SubmitAsync(HtmlAgilityPack.HtmlNode element)
+    method static System.Threading.Tasks.Task TriggerEventAsync(HtmlAgilityPack.HtmlNode element, System.String attributeName, System.EventArgs eventArgs)
+    method static System.Void Change(HtmlAgilityPack.HtmlNode element, System.Boolean newValue)
+    method static System.Void Change(HtmlAgilityPack.HtmlNode element, System.String newValue)
+    method static System.Void Click(HtmlAgilityPack.HtmlNode element)
+    method static System.Void Submit(HtmlAgilityPack.HtmlNode element)
+  type Blazorme.MockHttpExtensions : static class
+    method static RichardSzalay.MockHttp.MockHttpMessageHandler AddMockHttp(Blazorme.TestHost host)
+    method static System.Threading.Tasks.TaskCompletionSource<System.Object> Capture(RichardSzalay.MockHttp.MockHttpMessageHandler handler, System.String url)
+  type Blazorme.RenderedComponent<TComponent> : class
+    method HtmlAgilityPack.HtmlNode Find(System.String selector)
+    method System.Collections.Generic.ICollection<HtmlAgilityPack.HtmlNode> FindAll(System.String selector)
+    method System.String GetMarkup()
+    property TComponent Instance { get; }
+  type Blazorme.TestHost : class
+    ctor .ctor()
+    method Blazorme.RenderedComponent<TComponent> AddComponent<TComponent>()
+    method Blazorme.RenderedComponent<TComponent> AddComponent<TComponent>(Microsoft.AspNetCore.Components.ParameterView parameters)
+    method Blazorme.RenderedComponent<TComponent> AddComponent<TComponent>(System.Collections.Generic.IDictionary<System.String, System.Object> parameters)
+    method System.Void AddService<T>(T implementation)
+    method System.Void AddService<TContract, TImplementation>(TImplementation implementation)
+    method System.Void WaitForNextRender(System.Action trigger)
+    property System.IServiceProvider Services { get; }
+
+assembly Blazorme.FFmpeg
+  type Blazorme.FFmpegerviceExtensions : static class
+    method static Microsoft.Extensions.DependencyInjection.IServiceCollection AddFFmpeg(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+  type Blazorme.IFFmpeg : interface
+  type BlazormeFFmpeg._Imports : class
+    ctor .ctor()
+    method System.Void Execute()
+
