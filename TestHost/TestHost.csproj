@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <PackageId>Blazorme.TestHost</PackageId>
     <AssemblyName>Blazorme.TestHost</AssemblyName>
@@ -22,8 +22,8 @@ Note that bUnit grew out of the same prototype and is the actively maintained op
     <PackageProjectUrl>https://github.com/melihercan/Blazorme</PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Modernised for .NET 10. Targets net10.0 only; netstandard2.1 and net5.0 are no longer supported.
-Fixed: version 1.0.0 did not work on .NET 5 or later at all, despite advertising .NET 5 support. Duplicate PackageReference items meant the net5.0 build was compiled against ASP.NET Core 3.1, whose RenderTreeFrame exposed public fields that later became properties, so rendering a component threw MissingFieldException at runtime.</PackageReleaseNotes>
+    <PackageReleaseNotes>Modernised for .NET 10, and multi-targeted so .NET 8 projects have a working version too. netstandard2.1 and net5.0 are no longer supported.
+Fixed: version 1.0.0 did not work on .NET 5 or later at all, despite advertising .NET 5 support. Duplicate PackageReference items meant both of its builds were compiled against ASP.NET Core 3.1, whose RenderTreeFrame exposed public fields that later became properties, so rendering a component threw MissingFieldException at runtime.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,12 +31,26 @@ Fixed: version 1.0.0 did not work on .NET 5 or later at all, despite advertising
     <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
+  <!-- Framework packages are declared ONLY inside these per-framework groups, never alongside an
+       unconditional entry for the same package. That combination is what broke 1.0.0: duplicate
+       PackageReference items do not merge, the first wins, and the conditional one is silently
+       discarded (NU1504), so every build was bound to ASP.NET Core 3.1. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.30" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.30" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="10.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.11" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
   </ItemGroup>
 

@@ -91,6 +91,25 @@ Removing the duplicate and retargeting to `net10.0` was the whole repair.
 
 The lesson worth keeping: NU1504 was never cosmetic here. It was the bug.
 
+### Why it multi-targets
+
+`Blazorme.TestHost` targets `net8.0;net10.0`, alone among the packages. 1.0.0 is the only version
+a project on .NET 5 to .NET 9 can resolve — 26.9.7 would be out of reach if it were net10.0-only —
+and 1.0.0 crashes. Shipping net8.0 as well gives those projects something that works.
+
+The other three libraries need no equivalent: their 1.0.x releases still function on those
+frameworks. They are old, not broken, which is why they are not deprecated either.
+
+Framework packages are declared **only** inside per-framework `ItemGroup`s. An unconditional entry
+for a package that also appears conditionally recreates the 1.0.0 bug.
+`MultiTargetingTests` asserts that every shipped asset references its own Components major, and
+that both frameworks expose an identical public surface.
+
+Worth knowing: current NuGet catches this class of mistake by itself. Reintroducing the duplicate
+fails the build — `NU1202` if the unconditional version is too new for a target, `NU1605` package
+downgrade if it is too old — both promoted to errors by `-warnaserror`. The 2020 toolchain had
+neither check, which is how 1.0.0 shipped. The tests are a second line of defence, not the first.
+
 ## Component conventions
 
 **Do not override both `OnInitializedAsync` and `OnParametersSetAsync` with the same work.** Blazor

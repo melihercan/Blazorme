@@ -86,6 +86,25 @@ the root README no longer says "three component libraries" while listing four.
 `ci.yml` and `publish.yml` added; `GeneratePackageOnBuild` removed now that CI owns packaging. See
 [Publishing](Publishing).
 
+## After the release — TestHost multi-targeting
+
+`Blazorme.TestHost` now targets `net8.0;net10.0` rather than net10.0 alone.
+
+The reasoning: 1.0.0 is the only version a project on .NET 5 to .NET 9 can resolve, since it ships
+a `netstandard2.1` asset that those frameworks accept — and it crashes at runtime. A net10.0-only
+26.9.7 would have left that group stuck on the broken version with no working alternative.
+Shipping net8.0 alongside gives them one.
+
+The other three packages need no equivalent. Their 1.0.x releases still work on those frameworks;
+they are old, not broken, which is also why they are not candidates for deprecation.
+
+`MultiTargetingTests` guards the failure mode that caused all this: it asserts every shipped asset
+references its own Components major, and that both frameworks expose an identical public surface.
+
+Current NuGet also catches the mistake on its own — reintroducing the duplicate reference fails the
+build with NU1202 or NU1605 depending on direction, both errors under `-warnaserror`. The 2020
+toolchain had neither check, which is how 1.0.0 shipped broken for five years.
+
 ## What is still open
 
 - **The demo site is five years stale** and deployed from a different repository by hand. There is

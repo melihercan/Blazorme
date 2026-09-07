@@ -7,7 +7,7 @@ Utility component libraries for Blazor apps, published to NuGet as independent p
 | [Blazorme.Diff](https://www.nuget.org/packages/Blazorme.Diff) | 26.9.7 | `net10.0` | [README](https://github.com/melihercan/Blazorme/blob/master/Diff/README.md) |
 | [Blazorme.Split](https://www.nuget.org/packages/Blazorme.Split) | 26.9.7 | `net10.0` | [README](https://github.com/melihercan/Blazorme/blob/master/Split/README.md) |
 | [Blazorme.StreamSaver](https://www.nuget.org/packages/Blazorme.StreamSaver) | 26.9.7 | `net10.0` | [README](https://github.com/melihercan/Blazorme/blob/master/StreamSaver/README.md) |
-| [Blazorme.TestHost](https://www.nuget.org/packages/Blazorme.TestHost) | 26.9.7 | `net10.0` | [README](https://github.com/melihercan/Blazorme/blob/master/TestHost/README.md) |
+| [Blazorme.TestHost](https://www.nuget.org/packages/Blazorme.TestHost) | 26.9.7 | `net8.0`, `net10.0` | [README](https://github.com/melihercan/Blazorme/blob/master/TestHost/README.md) |
 
 The libraries are unrelated and share no code. `FFmpeg/` is an unfinished stub and is not published.
 

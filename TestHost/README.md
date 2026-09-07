@@ -5,7 +5,12 @@ Support library for Blazor component unit testing. The source code is taken from
 [bUnit](https://github.com/bUnit-dev/bUnit) grew out of the same prototype and is the actively maintained library for this job. For a new test suite, prefer it. This package exists for projects already built on it.
 
 ## Requirements
-Requires **.NET 10**. Earlier versions of this package targeted `netstandard2.1` and `net5.0`; those are no longer supported.
+Targets **net8.0** and **net10.0**. Earlier versions targeted `netstandard2.1` and `net5.0`; those
+are no longer supported.
+
+.NET 8 is included deliberately. A net10.0-only package would leave every project on .NET 5 to
+.NET 9 resolving 1.0.0, which crashes at runtime (see below), so those users would be worse off
+than before.
 
 > **Version 1.0.0 did not work on .NET 5 or later**, despite advertising that it did. Duplicate
 > `PackageReference` items meant its `net5.0` build was compiled against ASP.NET Core 3.1, whose

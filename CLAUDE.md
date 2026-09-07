@@ -87,9 +87,19 @@ so turning it on would emit hundreds of CS1591 warnings and break the zero-warni
 
 ## Targeting
 
-All projects target **`net10.0` only** (single-target). The repo was migrated from
-`netstandard2.1`/`net5.0`; that history explains some of the code shape but is no longer a
-constraint.
+Everything targets **`net10.0`**, except `Blazorme.TestHost`, which multi-targets
+**`net8.0;net10.0`**. The repo was migrated from `netstandard2.1`/`net5.0`; that history explains
+some of the code shape but is no longer a constraint.
+
+TestHost carries net8.0 deliberately. Its 1.0.0 on nuget.org crashes at runtime on anything past
+.NET Core 3.1, so a net10.0-only release would leave every project on .NET 5 to .NET 9 resolving
+that broken version. The other three libraries do not need this: their 1.0.x releases work fine on
+those frameworks, they are merely old.
+
+**Framework packages in TestHost.csproj are declared only inside per-framework `ItemGroup`s.** Never
+add an unconditional `PackageReference` for a package that also appears in a conditional group —
+that is precisely what broke 1.0.0. `MultiTargetingTests` asserts each shipped asset binds to its
+own Components major.
 
 Consequences of the migration, so they are not accidentally reintroduced:
 
@@ -101,7 +111,7 @@ Consequences of the migration, so they are not accidentally reintroduced:
   yet; turning it on there will surface warnings across the pages, so do it deliberately.
 - Third-party packages are pinned at their pre-migration versions and work fine: `htmldiff.net`
   1.4.0, `Fizzler.Systems.HtmlAgilityPack` 1.2.1, `RichardSzalay.MockHttp` 6.0.0, `Markdig` 0.24.0.
-  Framework packages are on 10.0.11.
+  Framework packages are on 10.0.11, and on 8.0.x for TestHost's net8.0 assets.
 
 ## Backward compatibility
 

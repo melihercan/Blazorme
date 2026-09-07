@@ -13,7 +13,12 @@ namespace Blazorme.Tests;
 /// </summary>
 internal static class PublicApiDumper
 {
-    internal static string Dump(IEnumerable<string> assemblyNames)
+    internal static string Dump(IEnumerable<string> assemblyNames) =>
+        Dump(assemblyNames.Select(n => (n, TestAssemblies.LocateDll(n))));
+
+    /// <summary>Dumps specific assembly files, so one multi-targeted library's frameworks can be
+    /// compared against each other.</summary>
+    internal static string Dump(IEnumerable<(string Name, string Path)> assemblies)
     {
         var resolver = new PathAssemblyResolver(
             TestAssemblies.ProbingDirectories()
@@ -25,9 +30,9 @@ internal static class PublicApiDumper
         using var context = new MetadataLoadContext(resolver);
         var sb = new StringBuilder();
 
-        foreach (var name in assemblyNames)
+        foreach (var (name, path) in assemblies)
         {
-            var assembly = context.LoadFromAssemblyPath(TestAssemblies.LocateDll(name));
+            var assembly = context.LoadFromAssemblyPath(path);
             sb.Append("assembly ").Append(name).AppendLine();
 
             foreach (var type in assembly.GetExportedTypes().OrderBy(t => t.FullName, StringComparer.Ordinal))
