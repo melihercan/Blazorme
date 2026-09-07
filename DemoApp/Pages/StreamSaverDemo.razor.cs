@@ -64,8 +64,15 @@ namespace DemoApp.Pages
 
         private async Task ResetAsync()
         {
-            await _writableFileStream?.DisposeAsync().AsTask();
-            _writableFileStream = null;
+            // The null-conditional binds across the whole chain, so with no stream created this
+            // used to evaluate to a null Task, and "await null" threw NullReferenceException.
+            // Close and Reset on a fresh page both hit it.
+            if (_writableFileStream is not null)
+            {
+                await _writableFileStream.DisposeAsync();
+                _writableFileStream = null;
+            }
+
             _stringBuilder.Clear();
             ClearFilename();
             _streamSaverModel.FilenameDisabled = false;
