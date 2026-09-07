@@ -1,0 +1,169 @@
+name: Publish
+
+# One workflow for every package, because a NuGet Trusted Publishing policy is bound to a single
+# workflow file. Keeping this as one file means one policy — scoped to "Blazorme.*" — covers all
+# four packages, every future version, and any future Blazorme.X package.
+#
+# Ways in:
+#   * tag v<version>              — publishes every package
+#   * tag diff-v<version>         — publishes Blazorme.Diff only
+#   * tag split-v<version>        — publishes Blazorme.Split only
+#   * tag streamsaver-v<version>  — publishes Blazorme.StreamSaver only
+#   * tag testhost-v<version>     — publishes Blazorme.TestHost only
+#   * run manually                — defaults to a dry run that packs and uploads the .nupkg
+#                                   files as build artifacts without publishing anything
+#
+# Blazorme.FFmpeg is deliberately absent: it is an unfinished stub, has never been published,
+# and is marked IsPackable=false.
+on:
+  push:
+    tags:
+      - 'v*'
+      - 'diff-v*'
+      - 'split-v*'
+      - 'streamsaver-v*'
+      - 'testhost-v*'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Which package to publish'
+        type: choice
+        options: [all, diff, split, streamsaver, testhost]
+        default: all
+      dry-run:
+        description: 'Pack only, do not push to NuGet'
+        type: boolean
+        default: true
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+env:
+  DIFF_PROJECT: Diff/Diff.csproj
+  SPLIT_PROJECT: Split/Split.csproj
+  STREAMSAVER_PROJECT: StreamSaver/StreamSaver.csproj
+  TESTHOST_PROJECT: TestHost/TestHost.csproj
+
+jobs:
+  publish:
+    name: Pack and publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Lets the job request a GitHub OIDC token, which nuget.org exchanges for a
+      # short-lived API key. Nothing long-lived is stored in the repository.
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      # Works out which projects this run covers, and which version a tag claims.
+      - name: Resolve targets
+        id: targets
+        run: |
+          set -euo pipefail
+          all="$DIFF_PROJECT $SPLIT_PROJECT $STREAMSAVER_PROJECT $TESTHOST_PROJECT"
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            case "${{ inputs.package }}" in
+              diff)        projects="$DIFF_PROJECT" ;;
+              split)       projects="$SPLIT_PROJECT" ;;
+              streamsaver) projects="$STREAMSAVER_PROJECT" ;;
+              testhost)    projects="$TESTHOST_PROJECT" ;;
+              *)           projects="$all" ;;
+            esac
+            version=''                       # nothing to verify on a manual run
+          else
+            case "$GITHUB_REF_NAME" in
+              diff-v*)        projects="$DIFF_PROJECT";        version="${GITHUB_REF_NAME#diff-v}" ;;
+              split-v*)       projects="$SPLIT_PROJECT";       version="${GITHUB_REF_NAME#split-v}" ;;
+              streamsaver-v*) projects="$STREAMSAVER_PROJECT"; version="${GITHUB_REF_NAME#streamsaver-v}" ;;
+              testhost-v*)    projects="$TESTHOST_PROJECT";    version="${GITHUB_REF_NAME#testhost-v}" ;;
+              v*)             projects="$all";                 version="${GITHUB_REF_NAME#v}" ;;
+              *)              echo "::error::Unrecognised tag $GITHUB_REF_NAME"; exit 1 ;;
+            esac
+          fi
+          echo "projects=$projects" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Projects: $projects"
+          echo "Version:  ${version:-(not checked)}"
+
+      # Catches the classic release bug: tagging one version while a csproj still says another.
+      # Note the csproj values are written as 26.09.07 and NuGet normalises them to 26.9.7, so the
+      # tag must carry the csproj spelling, i.e. v26.09.07.
+      - name: Verify the tag matches the project versions
+        if: steps.targets.outputs.version != ''
+        run: |
+          set -euo pipefail
+          tag='${{ steps.targets.outputs.version }}'
+          for project in ${{ steps.targets.outputs.projects }}; do
+            version=$(sed -n 's|.*<Version>\(.*\)</Version>.*|\1|p' "$project" | head -1)
+            echo "$project declares $version, tag says $tag"
+            if [ "$version" != "$tag" ]; then
+              echo "::error::Tag $GITHUB_REF_NAME does not match <Version>$version</Version> in $project"
+              exit 1
+            fi
+          done
+
+      - name: Restore
+        run: dotnet restore Blazorme.sln
+
+      - name: Build
+        run: dotnet build Blazorme.sln --configuration Release --no-restore -warnaserror
+
+      # Never publish a package whose tests do not pass.
+      - name: Test
+        run: dotnet test --configuration Release
+
+      - name: Pack
+        run: |
+          set -euo pipefail
+          for project in ${{ steps.targets.outputs.projects }}; do
+            dotnet pack "$project" \
+              --configuration Release \
+              --output artifacts \
+              -p:ContinuousIntegrationBuild=true
+          done
+
+      - name: Show package contents
+        run: |
+          for pkg in artifacts/*.nupkg; do
+            echo "== $pkg"
+            unzip -l "$pkg"
+          done
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nupkg
+          path: artifacts/*.nupkg
+          if-no-files-found: error
+
+      # Trusted Publishing: swap a GitHub OIDC token for an API key that nuget.org
+      # issues for one hour. Requested immediately before the push, because the key
+      # expires and each token buys exactly one key.
+      #
+      # Requires a Trusted Publishing policy on nuget.org naming this repository and
+      # this workflow file, scoped to Blazorme.*. No API key secret is involved.
+      - name: NuGet login
+        if: github.event_name == 'push' || inputs.dry-run == false
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: melihercan
+
+      # --skip-duplicate makes a re-run harmless if the version is already published.
+      - name: Push to NuGet
+        if: github.event_name == 'push' || inputs.dry-run == false
+        run: |
+          dotnet nuget push "artifacts/*.nupkg" \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+      - name: Dry run summary
+        if: github.event_name == 'workflow_dispatch' && inputs.dry-run
+        run: echo "::notice::Dry run - packages built and uploaded as artifacts, nothing published."

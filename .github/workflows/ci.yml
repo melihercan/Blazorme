@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore Blazorme.sln
+
+      # The repository builds clean, so any warning is a regression. -warnaserror
+      # also turns a new NuGet advisory (NU1903) into a failure, which is the point.
+      - name: Build
+        run: dotnet build Blazorme.sln --configuration Release --no-restore -warnaserror
+
+      # The build above is not just a prerequisite for the tests: PublicApiSurfaceTests reads the
+      # libraries' compiled assemblies off disk through MetadataLoadContext rather than referencing
+      # them, so every library must have been built in this configuration before the tests run.
+      #
+      # Runs on Microsoft.Testing.Platform via the test.runner setting in global.json.
+      # Do not add --nologo or other VSTest-era flags: MTP forwards unrecognised
+      # arguments to the test executable, which exits 5 with "Zero tests ran".
+      - name: Test
+        run: dotnet test --configuration Release
