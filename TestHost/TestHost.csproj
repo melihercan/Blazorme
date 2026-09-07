@@ -1,26 +1,36 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Blazorme.TestHost</PackageId>
+    <AssemblyName>Blazorme.TestHost</AssemblyName>
     <RootNamespace>BlazormeTestHost</RootNamespace>
-    <Description>Steve  Sanderson's TestHost implementation as NuGet package from his BlazorUnitTestingPrototype project source code. This library provides helpers for unit testing of Blazor components. Additionally .NET5 support has been provided. NuGet now supports both .NetStandard2.1 and .NET5. See the following links for more details:
+    <Version>26.09.07</Version>
+    <Authors>melihercan</Authors>
+    <Company>melihercan</Company>
+    <Product>Blazorme.TestHost</Product>
+    <Copyright>melihercan 2020-2026</Copyright>
+    <Description>Helpers for unit testing Blazor components, packaged from Steve Sanderson's BlazorUnitTestingPrototype, which he published as source only:
 https://blog.stevensanderson.com/2019/08/29/blazor-unit-testing-prototype/
 https://github.com/SteveSandersonMS/BlazorUnitTestingPrototype
-</Description>
-    <PackageId>Blazorme.TestHost</PackageId>
-    <Authors>melihercan</Authors>
-    <Product>Blazorme.TestHost</Product>
-    <Copyright>melihercan 2020</Copyright>
+Note that bUnit grew out of the same prototype and is the actively maintained option; prefer it for new test suites.</Description>
+    <PackageTags>blazor testing TestHost</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>me.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/melihercan/Blazorme</PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>blazor testing TestHost</PackageTags>
-    <PackageReleaseNotes>First version.</PackageReleaseNotes>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyName>Blazorme.TestHost</AssemblyName>
+    <PackageReleaseNotes>Modernised for .NET 10. Targets net10.0 only; netstandard2.1 and net5.0 are no longer supported.
+Fixed: version 1.0.0 did not work on .NET 5 or later at all, despite advertising .NET 5 support. Duplicate PackageReference items meant the net5.0 build was compiled against ASP.NET Core 3.1, whose RenderTreeFrame exposed public fields that later became properties, so rendering a component threw MissingFieldException at runtime.</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\doc\me.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Fizzler.Systems.HtmlAgilityPack" Version="1.2.1" />
@@ -29,13 +39,6 @@ https://github.com/SteveSandersonMS/BlazorUnitTestingPrototype
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.11" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\doc\me.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>

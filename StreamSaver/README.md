@@ -1,7 +1,12 @@
 # Blazorme.StreamSaver
-JSInterop of [StreamSaver](https://github.com/jimmywarting/StreamSaver.js) package for Blazor WASM. 
-With this package, you can download files by writing incoming data chunks directly to the file instead of accumulating them in memory. 
+JSInterop of the [StreamSaver](https://github.com/jimmywarting/StreamSaver.js) package for Blazor.
+With this package, you can download files by writing incoming data chunks directly to the file instead of accumulating them in memory.
 This will prevent memory overflows for very large files.
+
+Requires **.NET 10**. Earlier versions targeted `net5.0`, which is no longer supported.
+
+Intended for Blazor WebAssembly. It also runs on Blazor Server, but there every chunk crosses the
+SignalR circuit, which makes it a poor fit for the large transfers this package exists for.
 
 It provides a very simple API:
 ```cs

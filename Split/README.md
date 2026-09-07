@@ -1,6 +1,8 @@
 # Blazorme.Split
 Split component library for Blazor apps. The library provides resizeable split views (panes).
 
+Requires **.NET 10**. Earlier versions targeted `netstandard2.1` and `net5.0`, which are no longer supported.
+
 Use `DemoApp` as a reference for your implementation.
 
 ## Implementation

@@ -1,5 +1,7 @@
 # Blazorme.Diff
 Diff component library for Blazor apps.
+
+Requires **.NET 10**. Earlier versions targeted `netstandard2.1` and `net5.0`, which are no longer supported.
 The library will render diff of the two input strings in different output display formats. Output is always in HTML and currently 3 output display formats are provided via `OutputFormat` parameter:
 * Inline: Inlined format. Intented for HTML inputs although plain text can also be used.
 * Row: Line by line format for text inputs.
@@ -36,7 +38,7 @@ For API calls from code behine add:
 If you like to use API from code behind, inject `IDiff`:
 ```cs
   [Inject]
-  private IDiff DiffApi { get; set; }
+  private IDiff DiffApi { get; set; } = default!;
 ```
 * JS and CSS references:
 
@@ -148,7 +150,7 @@ The Diff component can also be used as a library to get `diff` or `html diff` ou
 Inject IDiff and call API functions. 
 ```cs
        [Inject]
-        private IDiff DiffApi { get; set; }
+        private IDiff DiffApi { get; set; } = default!;
 
         ...
         

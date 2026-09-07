@@ -1,22 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>BlazormeStreamSaver</RootNamespace>
-    <AssemblyName>Blazorme.StreamSaver</AssemblyName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Blazorme.StreamSaver</PackageId>
+    <AssemblyName>Blazorme.StreamSaver</AssemblyName>
+    <RootNamespace>BlazormeStreamSaver</RootNamespace>
+    <Version>26.09.07</Version>
     <Authors>melihercan</Authors>
-    <Description>JSInterop of StreamSaver (https://github.com/jimmywarting/StreamSaver.js) package for Blazor WASM. 
-With this package, you can download files by writing incoming data chunks directly to the file instead of accumulating them in memory. That will prevent memory overflows for very large files.</Description>
-    <Copyright>melihercan2021</Copyright>
+    <Company>melihercan</Company>
+    <Product>Blazorme.StreamSaver</Product>
+    <Copyright>melihercan 2021-2026</Copyright>
+    <Description>JSInterop of StreamSaver (https://github.com/jimmywarting/StreamSaver.js) for Blazor.
+Download files by writing incoming data chunks straight to the file instead of accumulating them in memory, which prevents memory overflows for very large files.
+Intended for Blazor WebAssembly. It also runs on Blazor Server, but every chunk crosses the SignalR circuit, so it is a poor fit for the large transfers this package exists for.</Description>
+    <PackageTags>blazor file download writable stream</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>me.png</PackageIcon>
-    <PackageIconUrl />
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/melihercan/Blazorme</PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>blazor file download writable stream</PackageTags>
-    <PackageReleaseNotes>Creation</PackageReleaseNotes>
+    <PackageReleaseNotes>Modernised for .NET 10. Targets net10.0 only; net5.0 is no longer supported.
+The JS interop is rebuilt on IJSObjectReference modules, replacing System.Private.Runtime.InteropServices.JavaScript — the .NET 5/6 preview WASM API that was removed in .NET 7 and that this package could not have run without.
+Fixed: WriteAsync ignored the offset and count it was given and sent the whole array. Stream.WriteAsync(ReadOnlyMemory) supplies an oversized pooled buffer, so downloads had trailing bytes appended.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,14 +32,12 @@ With this package, you can download files by writing incoming data chunks direct
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.11" />
+    <None Include="..\doc\me.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\doc\me.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.11" />
   </ItemGroup>
 
 </Project>

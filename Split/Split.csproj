@@ -1,37 +1,38 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>melihercan</Authors>
-    <Company>melihercan</Company>
-    <Product>Blazorme.Split</Product>
-    <Description>Split component library for Blazor apps.
-It provides resizeable split views (panes).</Description>
-    <Copyright>melihercan 2020</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>me.png</PackageIcon>
-    <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>blazor split resizable panes components</PackageTags>
-    <PackageReleaseNotes>Added .NET 5 support.</PackageReleaseNotes>
     <PackageId>Blazorme.Split</PackageId>
     <AssemblyName>Blazorme.Split</AssemblyName>
     <RootNamespace>BlazormeSplit</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>26.09.07</Version>
+    <Authors>melihercan</Authors>
+    <Company>melihercan</Company>
+    <Product>Blazorme.Split</Product>
+    <Copyright>melihercan 2020-2026</Copyright>
+    <Description>Split component library for Blazor apps.
+It provides resizeable split views (panes).</Description>
+    <PackageTags>blazor split resizable panes components</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>me.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/melihercan/Blazorme</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Modernised for .NET 10. Targets net10.0 only; netstandard2.1 and net5.0 are no longer supported.
+Fixed: the component overwrote its own Cursor parameter, so the cursor went stale when Direction changed; the direction and gutter-align options sent to split.js are now lowercased invariantly; SplitPane used outside a Split throws InvalidOperationException instead of a bare Exception.</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\doc\me.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="10.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\doc\me.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>

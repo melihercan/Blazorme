@@ -1,11 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>BlazormeFFmpeg</RootNamespace>
     <AssemblyName>Blazorme.FFmpeg</AssemblyName>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Unfinished stub: IFFmpeg has no members and nothing is implemented yet. It has never
+         been published, and IsPackable=false keeps it from being published by accident. -->
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
