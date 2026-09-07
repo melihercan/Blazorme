@@ -262,6 +262,21 @@ a property as well as to a field. NU1504 was never cosmetic here; it was the bug
 `AddComponent(IDictionary<string, object>)` keeps its exact parameter type — widening it to
 `object?` would change the IL signature — so it uses `!` at the call site.
 
+## The demo site
+
+`https://melihercan.github.io/` comes from the separate `melihercan/melihercan.github.io`
+repository — a GitHub user site must live at that repository's root. Deploy with
+**`./deploy-demo.ps1`**, which publishes `DemoApp`, replaces the site contents and leaves the result
+staged; it never commits or pushes. There is no CI deployment on purpose, because writing to another
+repository from Actions requires a stored credential and this repository keeps none.
+
+`DemoApp/wwwroot` carries `.nojekyll` and `404.html`, and `index.html` carries the
+spa-github-pages decoder, so the published output is the complete site. Do not remove any of the
+three: without `.nojekyll` GitHub Pages strips `_framework`; without the 404/decoder pair a deep
+link dies on refresh. The site repository's `.gitattributes` (`* binary`) is equally load-bearing —
+without it git corrupts the `.wasm` files and Blazor's integrity check rejects its own runtime. The
+script verifies all of these and refuses to deploy if any is missing.
+
 ## Blazorme.FFmpeg
 
 An unfinished stub: `IFFmpeg` has no members and `FFmpeg` is an empty class. It has never been

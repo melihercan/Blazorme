@@ -107,8 +107,9 @@ toolchain had neither check, which is how 1.0.0 shipped broken for five years.
 
 ## What is still open
 
-- **The demo site is five years stale** and deployed from a different repository by hand. There is
-  no Pages workflow here.
+- **The demo site** is deployed from a different repository, by running `./deploy-demo.ps1` and
+  pushing. See [Publishing](Publishing#the-demo-site). It had been untouched since June 2020,
+  predating `Blazorme.StreamSaver` entirely.
 - **`Blazorme.FFmpeg` is an empty stub** — `IFFmpeg` has no members. It builds and is excluded from
   packaging; nothing more.
 - **`Blazorme.TestHost` is superseded by bUnit**, which grew out of the same prototype. It works on

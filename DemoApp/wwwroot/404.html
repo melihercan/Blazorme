@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DemoApp</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafrex/spa-github-pages - MIT, (c) 2016 Rafael Pedicini.
+      //
+      // GitHub Pages serves this file for any path it does not recognise. Blazor routes such as
+      // /streamsaverdemo are exactly that on a hard refresh, so this converts the path into a
+      // ?p= query on the site root; the matching decoder in index.html turns it back into a route.
+      //
+      // segmentCount is 0 because the demo is served from the root of a user site
+      // (melihercan.github.io). It would need to be 1 for a project site served from a
+      // /repo-name/ subpath.
+      //
+      // This file must stay larger than 512 bytes or Internet Explorer ignores it.
+      var segmentCount = 0;
+
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+        l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

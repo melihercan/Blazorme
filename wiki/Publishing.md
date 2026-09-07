@@ -82,6 +82,28 @@ inherent to the .NET 10 migration, and each package's release notes lead with it
 ## The demo site
 
 `https://melihercan.github.io/` is served from the separate **`melihercan/melihercan.github.io`**
-repository, deployed by hand. It was last pushed in June 2020 — before `Blazorme.StreamSaver`
-existed — so it does not reflect the current `DemoApp`. This repository has no GitHub Pages site and
-no Pages workflow.
+repository. It has to live there: a GitHub *user* site must sit at the root of that repository, and
+deploying from here instead would move the demo to `melihercan.github.io/Blazorme/`.
+
+Deploy it with **`./deploy-demo.ps1`**, which publishes `DemoApp`, replaces the site contents, and
+leaves the change staged for you to review and push. It never commits and never pushes.
+
+There is deliberately no CI deployment. Writing to another repository from Actions needs a stored
+credential — a PAT or a deploy key — and this repository otherwise stores none, having moved
+publishing to OIDC precisely to avoid that.
+
+Four things the site needs that are easy to lose, all of which the script verifies:
+
+| | Why |
+|---|---|
+| `.gitattributes` with `* binary` | Git would otherwise rewrite line endings inside `.wasm` and `.dll` files, and Blazor's integrity check then rejects its own runtime ([aspnetcore#21560](https://github.com/dotnet/aspnetcore/issues/21560)). The script refuses to run without it. |
+| `.nojekyll` | Pages runs Jekyll, which strips `_`-prefixed paths — `_framework` and `_content` would vanish. |
+| `404.html` | Pages serves it for unknown paths. It converts `/streamsaverdemo` into `/?p=/streamsaverdemo`, which is how a deep link survives a hard refresh. |
+| The decoder in `index.html` | The other half: turns that query back into a route. Inert without a `?p=`. |
+
+`.nojekyll` and `404.html` now live in `DemoApp/wwwroot` and the decoder is in the app's own
+`index.html`, so the published output is the whole site. Only `.gitattributes`, `LICENSE` and
+`README.md` belong to the site repository and are preserved across a deployment.
+
+`404.html` sets `segmentCount = 0` because the demo is served from the root of a user site. A
+project site under `/repo-name/` would need `1`, and a matching `<base href>`.
