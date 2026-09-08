@@ -207,8 +207,10 @@ a diff renderer, but it means the inputs are trusted.
 Since 26.9.8 the package **ships jsdiff and diff2html** in `wwwroot` and loads them through
 `DiffJsInterop.js`, so consumers add nothing to their host page. The loader skips a library whose
 global is already defined, so apps still carrying the old CDN tags keep working and fetch nothing
-twice. Vendored versions are pinned to what the CDN tags used to reference — jsdiff 4.0.2 and
-diff2html 3.1.7 — so behaviour did not change; bumping them is a separate decision.
+twice. Vendored versions are **jsdiff 9.0.0 and diff2html 3.4.56** as of 26.9.9. They were pinned to the
+old CDN references (4.0.2 / 3.1.7) when bundling landed in 26.9.8, so that change altered no
+behaviour, and upgraded separately afterwards. Check
+`gh api "/advisories?ecosystem=npm&affects=diff@<version>"` before bumping again.
 `THIRD-PARTY-NOTICES.txt` carries their licences and must ship with the package.
 
 ## Blazorme.Split

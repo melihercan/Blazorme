@@ -2,7 +2,7 @@ Blazorme.Split redistributes the third-party components below. Their licences fo
 full. Blazorme itself is MIT licensed; see LICENSE in the repository root.
 
 ================================================================================
-Split.js 1.6.0 - https://github.com/nathancahill/split
+Split.js 1.6.5 - https://github.com/nathancahill/split
 Files: wwwroot/split.min.js
 ================================================================================
 

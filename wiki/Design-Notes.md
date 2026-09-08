@@ -57,9 +57,27 @@ imported as ES modules. Each package ships a small module that injects them and 
 **Apps that still have the old CDN tags keep working.** The loader returns early when the global is
 already defined, so nothing is fetched twice. That path is verified directly rather than assumed.
 
-Vendored versions are pinned to whatever the old CDN tags referenced — jsdiff 4.0.2, diff2html
-3.1.7, Split.js 1.6.0 — so behaviour did not change with the bundling. Upgrading them is a separate
-decision, and one worth taking deliberately: vendoring means this repository now ships that code.
+Bundling in 26.9.8 pinned the versions the old CDN tags referenced — jsdiff 4.0.2, diff2html 3.1.7,
+Split.js 1.6.0 — so that change altered no behaviour. They were upgraded separately in 26.9.9, to
+jsdiff 9.0.0, diff2html 3.4.56 and Split.js 1.6.5, once bundling itself was known good.
+
+That order was deliberate. Bundling and upgrading at once would have left any regression ambiguous
+between the two.
+
+**jsdiff 4.0.2 carried GHSA-73rr-hh4g-fpgx**, a low-severity denial of service in `parsePatch` and
+`applyPatch`. This library calls neither — it only uses `createTwoFilesPatch`, and diff2html parses
+patches with its own parser — so nothing here was exposed. It was resolved rather than carried.
+
+Checking before a future bump:
+
+```powershell
+gh api "/advisories?ecosystem=npm&affects=diff@9.0.0"
+```
+
+jsdiff 9.0.0 produces byte-identical patch output to 4.0.2, verified by running both against the
+same input in a browser. diff2html 3.4.56 does **not** produce identical markup: it adds a
+colour-scheme class and a file-collapse control, and its stylesheet grew from 4 KB to 17 KB. Ship
+the matching stylesheet, or the rendering breaks in ways the C# tests cannot see — they mock JS.
 
 `THIRD-PARTY-NOTICES.txt` in each package carries the upstream licences (jsdiff is BSD-3-Clause,
 diff2html and Split.js are MIT). Redistribution obliges us to include them, so they must stay in

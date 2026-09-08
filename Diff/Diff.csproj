@@ -6,7 +6,7 @@
     <PackageId>Blazorme.Diff</PackageId>
     <AssemblyName>Blazorme.Diff</AssemblyName>
     <RootNamespace>BlazormeDiff</RootNamespace>
-    <Version>26.09.08</Version>
+    <Version>26.09.09</Version>
     <Authors>melihercan</Authors>
     <Company>melihercan</Company>
     <Product>Blazorme.Diff</Product>
@@ -21,7 +21,9 @@ It can also be used as a library to get diff or html diff output strings from co
     <PackageProjectUrl>https://github.com/melihercan/Blazorme</PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>The jsdiff and diff2html assets now ship inside the package and load on demand, so a consuming app no longer has to add CDN script and stylesheet tags to index.html. Missing tags previously caused a JS interop error at runtime. Apps that still have those tags keep working; the loader skips a library whose global is already present.
+    <PackageReleaseNotes>Updates the bundled JavaScript: jsdiff 4.0.2 to 9.0.0 and diff2html 3.1.7 to 3.4.56.
+jsdiff 4.0.2 was affected by GHSA-73rr-hh4g-fpgx, a low-severity denial of service in parsePatch and applyPatch. This library calls neither, so it was not exposed, but the advisory is resolved rather than carried. jsdiff 9.0.0 produces byte-identical patch output.
+diff2html 3.4.56 renders slightly different markup from 3.1.7, adding a colour-scheme class and a file-collapse control, and ships a larger stylesheet. Both are included.
 See THIRD-PARTY-NOTICES.txt for the bundled components and their licences.</PackageReleaseNotes>
   </PropertyGroup>
 

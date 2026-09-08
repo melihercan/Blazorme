@@ -6,7 +6,7 @@
     <PackageId>Blazorme.Split</PackageId>
     <AssemblyName>Blazorme.Split</AssemblyName>
     <RootNamespace>BlazormeSplit</RootNamespace>
-    <Version>26.09.08</Version>
+    <Version>26.09.09</Version>
     <Authors>melihercan</Authors>
     <Company>melihercan</Company>
     <Product>Blazorme.Split</Product>
@@ -20,7 +20,7 @@ It provides resizeable split views (panes).</Description>
     <PackageProjectUrl>https://github.com/melihercan/Blazorme</PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>The Split.js asset now ships inside the package and loads on demand, so a consuming app no longer has to add a CDN script tag to index.html. A missing tag previously caused a JS interop error at runtime. Apps that still have the tag keep working; the loader skips loading when the global is already present.
+    <PackageReleaseNotes>Updates the bundled Split.js from 1.6.0 to 1.6.5. No advisories applied to either version; this simply stops shipping a five-year-old build.
 See THIRD-PARTY-NOTICES.txt for the bundled component and its licence.</PackageReleaseNotes>
   </PropertyGroup>
 
