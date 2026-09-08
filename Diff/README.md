@@ -42,24 +42,15 @@ If you like to use API from code behind, inject `IDiff`:
 ```
 * JS and CSS references:
 
-Add the following lines to your `index.html` (WebAsembly) or `_Host.cshtml` (Server) files:
-```html
-    <!-- inside head section -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/diff2html@3.1.7/bundles/css/diff2html.min.css"
-          integrity="sha256-JDuTv80/2mUu1FBkviyttybv8oWSYmqVttPo7VlCXfE="
-          crossorigin="anonymous">
+**None required.** Since 26.9.8 the package ships jsdiff and diff2html and loads them on demand,
+so there is nothing to add to `index.html` or `_Host.cshtml`.
 
-    <!-- inside body section -->
-    <script src="https://cdn.jsdelivr.net/npm/diff@4.0.2/dist/diff.min.js" 
-            integrity="sha256-xofEpXTFTnsOK+GIsjgJc1ZN0kSE3KsTtZJ2GQaWs3I=" 
-            crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/diff2html@3.1.7/bundles/js/diff2html.min.js" 
-            integrity="sha256-jaOrunaAmlbF5x0BUXSJbKimY9Urt8yORnOg3A9BDfM=" 
-            crossorigin="anonymous">
-    </script>
-```
+Earlier versions required three CDN references, and omitting any of them failed at runtime with a
+JS interop error. If your app still has them they remain harmless: the loader skips a library
+whose global is already defined, so nothing is fetched twice.
+
+The bundled components and their licences are listed in `THIRD-PARTY-NOTICES.txt` inside the
+package.
 * Service addition:
 
 Add the following entires to `Program.cs` in `Main` (WebAssembly) or `Startup.cs` in `Configure` (Server) function. 

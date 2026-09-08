@@ -6,7 +6,7 @@
     <PackageId>Blazorme.Split</PackageId>
     <AssemblyName>Blazorme.Split</AssemblyName>
     <RootNamespace>BlazormeSplit</RootNamespace>
-    <Version>26.09.07</Version>
+    <Version>26.09.08</Version>
     <Authors>melihercan</Authors>
     <Company>melihercan</Company>
     <Product>Blazorme.Split</Product>
@@ -20,12 +20,13 @@ It provides resizeable split views (panes).</Description>
     <PackageProjectUrl>https://github.com/melihercan/Blazorme</PackageProjectUrl>
     <RepositoryUrl>https://github.com/melihercan/Blazorme</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Modernised for .NET 10. Targets net10.0 only; netstandard2.1 and net5.0 are no longer supported.
-Fixed: the component overwrote its own Cursor parameter, so the cursor went stale when Direction changed; the direction and gutter-align options sent to split.js are now lowercased invariantly; SplitPane used outside a Split throws InvalidOperationException instead of a bare Exception.</PackageReleaseNotes>
+    <PackageReleaseNotes>The Split.js asset now ships inside the package and loads on demand, so a consuming app no longer has to add a CDN script tag to index.html. A missing tag previously caused a JS interop error at runtime. Apps that still have the tag keep working; the loader skips loading when the global is already present.
+See THIRD-PARTY-NOTICES.txt for the bundled component and its licence.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\doc\me.png" Pack="true" PackagePath="" />
+    <None Include="THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="" />
     <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 

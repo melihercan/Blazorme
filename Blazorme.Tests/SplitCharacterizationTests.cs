@@ -10,7 +10,17 @@ namespace Blazorme.Tests;
 /// </summary>
 public class SplitCharacterizationTests : BunitContext
 {
-    public SplitCharacterizationTests() => JSInterop.Mode = JSRuntimeMode.Loose;
+    // Rewritten in 26.9.8: Split.js now ships inside the package and is loaded by the bundled
+    // SplitJsInterop.js module, so the call is no longer a global "Split" invocation.
+    private const string ModulePath = "./_content/Blazorme.Split/SplitJsInterop.js";
+
+    private readonly BunitJSModuleInterop _module;
+
+    public SplitCharacterizationTests()
+    {
+        JSInterop.Mode = JSRuntimeMode.Loose;
+        _module = JSInterop.SetupModule(ModulePath);
+    }
 
     private IRenderedComponent<Split> RenderSplit(Action<ComponentParameterCollectionBuilder<Split>>? configure = null)
         => Render<Split>(p =>
@@ -22,7 +32,7 @@ public class SplitCharacterizationTests : BunitContext
 
     private BlazormeSplit.Options SingleSplitCallOptions()
     {
-        var call = JSInterop.Invocations.Single(i => i.Identifier == "Split");
+        var call = _module.Invocations["create"].Single();
         return (BlazormeSplit.Options)call.Arguments[1]!;
     }
 
@@ -46,14 +56,24 @@ public class SplitCharacterizationTests : BunitContext
     }
 
     [Fact]
-    public void Calls_the_js_Split_function_once_on_first_render_with_elements_then_options()
+    public void Calls_the_bundled_module_once_on_first_render_with_elements_then_options()
     {
         RenderSplit();
 
-        var call = JSInterop.Invocations.Should().ContainSingle(i => i.Identifier == "Split").Subject;
+        var call = _module.Invocations["create"].Should().ContainSingle().Subject;
         call.Arguments.Should().HaveCount(2);
         call.Arguments[0].Should().BeOfType<ElementReference[]>().Which.Should().HaveCount(2);
         call.Arguments[1].Should().BeOfType<BlazormeSplit.Options>();
+    }
+
+    [Fact]
+    public void Imports_the_bundled_module_from_the_static_web_asset_path()
+    {
+        // The app no longer has to add a split.js script tag of its own; a missing tag used to
+        // fail at runtime with a JS interop error.
+        RenderSplit();
+
+        _module.Invocations["create"].Should().ContainSingle();
     }
 
     [Fact]

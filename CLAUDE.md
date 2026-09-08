@@ -204,8 +204,12 @@ an empty string rather than throwing.
 The component renders its result as a `MarkupString`, i.e. **unescaped HTML**. That is the point of
 a diff renderer, but it means the inputs are trusted.
 
-Consumers must add the diff2html CSS and the `diff` / `diff2html` scripts themselves; the package
-ships no static web assets.
+Since 26.9.8 the package **ships jsdiff and diff2html** in `wwwroot` and loads them through
+`DiffJsInterop.js`, so consumers add nothing to their host page. The loader skips a library whose
+global is already defined, so apps still carrying the old CDN tags keep working and fetch nothing
+twice. Vendored versions are pinned to what the CDN tags used to reference — jsdiff 4.0.2 and
+diff2html 3.1.7 — so behaviour did not change; bumping them is a separate decision.
+`THIRD-PARTY-NOTICES.txt` carries their licences and must ship with the package.
 
 ## Blazorme.Split
 
@@ -222,7 +226,10 @@ sends lowercase, because split.js expects that. Both are deliberate.
 `Options.Sizes` is null when no pane declares a size, which split.js reads as "distribute evenly".
 If any pane declares one, the array is taken verbatim — a second pane left at 0 stays 0.
 
-Consumers must add the split.js script themselves; the package ships no static web assets.
+Since 26.9.8 the package **ships Split.js** in `wwwroot` and loads it through
+`SplitJsInterop.js`, so consumers add nothing to their host page. The module export is named
+`create`, not `Split`, so it cannot shadow the global it depends on. `THIRD-PARTY-NOTICES.txt`
+carries the licence and must ship with the package.
 
 ## Blazorme.StreamSaver
 

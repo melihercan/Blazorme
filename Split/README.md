@@ -20,11 +20,14 @@ In `_Imports.razor` add:
 ```
 * JS reference:
 
-Add the following line to your `index.html` (WebAsembly) or `_Host.cshtml` (Server) files:
-```html
-    <!-- inside body section -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"></script>
-```
+**None required.** Since 26.9.8 the package ships Split.js and loads it on demand, so there is
+nothing to add to `index.html` or `_Host.cshtml`.
+
+Earlier versions required a CDN script tag, and omitting it failed at runtime with a JS interop
+error. If your app still has it that remains harmless: the loader skips loading when the global is
+already defined.
+
+The bundled component and its licence are listed in `THIRD-PARTY-NOTICES.txt` inside the package.
 ## Usage
 In your Blazor page, add the top level `Split` entry and `SplitPane` sub-entires to form the split view. Here is a simple example:
 ```html

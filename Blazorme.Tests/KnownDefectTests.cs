@@ -21,11 +21,17 @@ namespace Blazorme.Tests;
 /// </summary>
 public class KnownDefectTests : BunitContext
 {
-    public KnownDefectTests() => JSInterop.Mode = JSRuntimeMode.Loose;
+    // Set up before anything renders: a module handler created afterwards has recorded nothing.
+    private readonly BunitJSModuleInterop _splitModule;
+
+    public KnownDefectTests()
+    {
+        JSInterop.Mode = JSRuntimeMode.Loose;
+        _splitModule = JSInterop.SetupModule("./_content/Blazorme.Split/SplitJsInterop.js");
+    }
 
     private BlazormeSplit.Options SingleSplitCallOptions()
-        => (BlazormeSplit.Options)JSInterop.Invocations
-            .Single(i => i.Identifier == "Split").Arguments[1]!;
+        => (BlazormeSplit.Options)_splitModule.Invocations["create"].Single().Arguments[1]!;
 
     [Fact]
     public void FIXED_Diff_fetches_its_html_once_per_parameter_set()
@@ -109,10 +115,7 @@ public class KnownDefectTests : BunitContext
                 p.AddChildContent<SplitPane>(pane => pane.AddChildContent("<p>b</p>"));
             });
 
-            var options = (BlazormeSplit.Options)JSInterop.Invocations
-                .Single(i => i.Identifier == "Split").Arguments[1]!;
-
-            options.Direction.Should().Be("horizontal");
+            SingleSplitCallOptions().Direction.Should().Be("horizontal");
 
             // The hazard that is now defused, shown on the letter that would have triggered it:
             "Inside".ToLower().Should().NotBe("inside", "tr-TR maps 'I' to 'ı', not 'i'");

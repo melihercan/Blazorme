@@ -45,6 +45,30 @@ Two are pinned `PERMANENT_` because fixing them would break the public API:
   meaningless to consumers, but they are public types in shipped assemblies. Razor does not offer a
   knob to make them internal.
 
+## Bundled JavaScript
+
+`Blazorme.Diff` and `Blazorme.Split` ship the JavaScript they depend on and load it on demand,
+rather than requiring the consuming app to add CDN script tags. Before 26.9.8 a missing tag failed
+at runtime with a JS interop error and nothing pointed at the cause.
+
+jsdiff, diff2html and Split.js are classic UMD bundles that assign globals, so they cannot be
+imported as ES modules. Each package ships a small module that injects them and awaits them.
+
+**Apps that still have the old CDN tags keep working.** The loader returns early when the global is
+already defined, so nothing is fetched twice. That path is verified directly rather than assumed.
+
+Vendored versions are pinned to whatever the old CDN tags referenced — jsdiff 4.0.2, diff2html
+3.1.7, Split.js 1.6.0 — so behaviour did not change with the bundling. Upgrading them is a separate
+decision, and one worth taking deliberately: vendoring means this repository now ships that code.
+
+`THIRD-PARTY-NOTICES.txt` in each package carries the upstream licences (jsdiff is BSD-3-Clause,
+diff2html and Split.js are MIT). Redistribution obliges us to include them, so they must stay in
+the package.
+
+`Blazorme.StreamSaver` is deliberately **not** done this way. `StreamSaver.min.js` and its polyfill
+involve a service worker and a MITM page, so injecting them dynamically is a different problem; its
+host page still loads them with `<script>` tags.
+
 ## Blazorme.StreamSaver
 
 The original implementation used `System.Private.Runtime.InteropServices.JavaScript` —
