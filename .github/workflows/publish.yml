@@ -76,7 +76,9 @@ jobs:
               testhost)    projects="$TESTHOST_PROJECT" ;;
               *)           projects="$all" ;;
             esac
-            version=''                       # nothing to verify on a manual run
+            # No tag, so no version to pack with. The build date is the scheme, written the way
+            # NuGet stores it, so a manual run produces what a tag cut today would.
+            version=$(date -u +%y.%-m.%-d)
           else
             case "$GITHUB_REF_NAME" in
               diff-v*)        projects="$DIFF_PROJECT";        version="${GITHUB_REF_NAME#diff-v}" ;;
@@ -92,22 +94,27 @@ jobs:
           echo "Projects: $projects"
           echo "Version:  ${version:-(not checked)}"
 
-      # Catches the classic release bug: tagging one version while a csproj still says another.
-      # Note the csproj values are written as 26.09.07 and NuGet normalises them to 26.9.7, so the
-      # tag must carry the csproj spelling, i.e. v26.09.07.
-      - name: Verify the tag matches the project versions
+      # No csproj declares a version any more, so there is nothing for a tag to disagree with -
+      # the tag is the only place a version is written, and pack is told what it is below.
+      #
+      # The tag may be written either way round. Dates read naturally with the zeros in -
+      # 26.09.14 is the 14th of September - but NuGet strips them, so that tag publishes as
+      # 26.9.14, and every file name, search result and `dotnet add package` shows the stripped
+      # form. Rather than forbid the readable spelling, normalise it here: the tag is for people,
+      # the normalised version is what ships, and the two cannot drift because only one of them
+      # is ever written down.
+      - name: Normalise the version
+        id: version
         if: steps.targets.outputs.version != ''
         run: |
           set -euo pipefail
           tag='${{ steps.targets.outputs.version }}'
-          for project in ${{ steps.targets.outputs.projects }}; do
-            version=$(sed -n 's|.*<Version>\(.*\)</Version>.*|\1|p' "$project" | head -1)
-            echo "$project declares $version, tag says $tag"
-            if [ "$version" != "$tag" ]; then
-              echo "::error::Tag $GITHUB_REF_NAME does not match <Version>$version</Version> in $project"
-              exit 1
-            fi
-          done
+          normalised=$(echo "$tag" | awk -F. '{for(i=1;i<=NF;i++) printf "%s%s", ($i+0), (i<NF?".":"")}')
+          if [ "$normalised" != "$tag" ]; then
+            echo "::notice::Tag $GITHUB_REF_NAME reads $tag; publishing as $normalised, which is how NuGet stores it."
+          fi
+          echo "value=$normalised" >> "$GITHUB_OUTPUT"
+          echo "Publishing version $normalised"
 
       - name: Restore
         run: dotnet restore Blazorme.sln
@@ -120,12 +127,17 @@ jobs:
         run: dotnet test --configuration Release
 
       - name: Pack
+        env:
+          # From the tag on a release, from today's date on a manual run. Never a csproj.
+          VERSION: ${{ steps.version.outputs.value || steps.targets.outputs.version }}
         run: |
           set -euo pipefail
+          test -n "$VERSION" || { echo "::error::No version resolved."; exit 1; }
           for project in ${{ steps.targets.outputs.projects }}; do
             dotnet pack "$project" \
               --configuration Release \
               --output artifacts \
+              -p:Version="$VERSION" \
               -p:ContinuousIntegrationBuild=true
           done
 

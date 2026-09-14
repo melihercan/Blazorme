@@ -23,10 +23,10 @@
          and a pin only holds until someone updates everything at once. This is the fork
          of that release: Apache-2.0, same API. -->
     <PackageReference Include="AwesomeAssertions" Version="9.6.0" />
-    <PackageReference Include="xunit.v3" Version="4.0.0" />
-    <PackageReference Include="bunit" Version="2.9.0" />
+    <PackageReference Include="xunit.v3" Version="4.0.1" />
+    <PackageReference Include="bunit" Version="2.11.3" />
     <PackageReference Include="NSubstitute" Version="6.2.0" />
-    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.0" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.12" />
   </ItemGroup>
 
 </Project>

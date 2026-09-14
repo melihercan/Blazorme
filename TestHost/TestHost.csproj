@@ -6,7 +6,6 @@
     <PackageId>Blazorme.TestHost</PackageId>
     <AssemblyName>Blazorme.TestHost</AssemblyName>
     <RootNamespace>BlazormeTestHost</RootNamespace>
-    <Version>26.09.07</Version>
     <Authors>melihercan</Authors>
     <Company>melihercan</Company>
     <Product>Blazorme.TestHost</Product>

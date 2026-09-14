@@ -6,7 +6,6 @@
     <PackageId>Blazorme.StreamSaver</PackageId>
     <AssemblyName>Blazorme.StreamSaver</AssemblyName>
     <RootNamespace>BlazormeStreamSaver</RootNamespace>
-    <Version>26.09.07</Version>
     <Authors>melihercan</Authors>
     <Company>melihercan</Company>
     <Product>Blazorme.StreamSaver</Product>

@@ -6,7 +6,6 @@
     <PackageId>Blazorme.Diff</PackageId>
     <AssemblyName>Blazorme.Diff</AssemblyName>
     <RootNamespace>BlazormeDiff</RootNamespace>
-    <Version>26.09.09</Version>
     <Authors>melihercan</Authors>
     <Company>melihercan</Company>
     <Product>Blazorme.Diff</Product>
