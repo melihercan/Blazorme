@@ -1,19 +1,24 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Xunit;
 
 namespace Blazorme.Tests;
 
 /// <summary>
-/// Guards for Blazorme.TestHost, which multi-targets net8.0 and net10.0 so that projects on
-/// .NET 8 have a working version. .NET 5 to .NET 9 cannot consume a net10.0-only package, and the
-/// only version they could otherwise resolve is 1.0.0, which crashes at runtime.
+/// Guards for what Blazorme.TestHost ships and what those assets are bound to.
 ///
-/// These tests exist because of exactly how 1.0.0 broke. It declared
-/// Microsoft.AspNetCore.Components 3.1.10 unconditionally AND 5.0.0 for net5.0. Duplicate
-/// PackageReference items do not merge — the first wins and the conditional one is silently
-/// discarded (NU1504) — so BOTH shipped assets were bound to ASP.NET Core 3.1 while the package
-/// advertised .NET 5 support. Nothing caught it for five years, because nothing ever asserted what
-/// the shipped assets were actually bound to.
+/// It multi-targeted net8.0 and net10.0 so that projects on .NET 8 had a working version. That
+/// ended when ASP.NET Core 10.0.x turned out to ship no net8.0 assets at all: keeping both meant
+/// pinning the .NET 8 build to ASP.NET Core 8 forever, and every package update failed the
+/// restore until someone hand-wrote per-framework versions. .NET 8 leaves support in November
+/// 2026, so the target went rather than the maintenance continuing. Projects still on .NET 8 stay
+/// on 26.9.7, which remains on nuget.org with its net8.0 build.
+///
+/// The binding assertion below outlives that change, and is the reason this class exists. 1.0.0
+/// declared Microsoft.AspNetCore.Components 3.1.10 unconditionally AND 5.0.0 for net5.0.
+/// Duplicate PackageReference items do not merge — the first wins and the conditional one is
+/// silently discarded (NU1504) — so BOTH shipped assets were bound to ASP.NET Core 3.1 while the
+/// package advertised .NET 5 support. Nothing caught it for five years, because nothing ever
+/// asserted what the shipped assets were actually bound to.
 /// </summary>
 public class MultiTargetingTests
 {
@@ -32,10 +37,12 @@ public class MultiTargetingTests
     }
 
     [Fact]
-    public void TestHost_ships_more_than_one_framework()
+    public void TestHost_ships_net10_only()
     {
-        // If this ever drops to one, .NET 8 consumers silently fall back to the broken 1.0.0.
-        TestAssemblies.TargetFrameworks(Project).Should().Contain(["net8.0", "net10.0"]);
+        // Stated rather than merely true, so adding a framework back is a decision someone makes
+        // here on purpose - with the net8.0 history in the class summary above in front of them -
+        // rather than something a package manager does to the csproj on a quiet afternoon.
+        TestAssemblies.TargetFrameworks(Project).Should().Equal(["net10.0"]);
     }
 
     [Theory]
@@ -58,7 +65,13 @@ public class MultiTargetingTests
     [Fact]
     public void Every_framework_exposes_the_same_public_surface()
     {
-        // A consumer moving between .NET 8 and .NET 10 must see an identical API.
+        // A consumer moving between frameworks must see an identical API.
+        //
+        // Dormant, not dead: with one target framework there is nothing to compare and this passes
+        // without asserting anything. It is kept because the comparison is the expensive part to
+        // write and the cheap part to keep, and it starts working again the moment a second
+        // framework is added - which is exactly when it would be needed and least likely to be
+        // written from scratch.
         var dumps = TestAssemblies.TargetFrameworks(Project)
             .Select(tfm => (tfm, api: PublicApiDumper.Dump(
                 [(Assembly, TestAssemblies.LocateDll(Assembly, tfm))])))
