@@ -1,5 +1,5 @@
 using System.Reflection;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.JSInterop;
 using NSubstitute;
 using Xunit;

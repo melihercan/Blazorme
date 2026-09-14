@@ -1,5 +1,5 @@
 using Bunit;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.AspNetCore.Components;
 using Xunit;
 

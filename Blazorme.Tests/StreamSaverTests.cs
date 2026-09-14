@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Infrastructure;
 using NSubstitute;
